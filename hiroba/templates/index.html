@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>トップページ</title>
-</head>
-<body>
-    <h1>Hello, World</h1>
-</body>
-</html>
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}カミヒロバ{% endblock %}
+
+{% block header%}
+
+<header class="masthead text-center text-white">
+    <div class="masthead-content">
+        <div class="container">
+            <h1 class="masthead-heading mb-0">カミヒロバ</h1>
+            <h2 class="masthead-subheading mb-0">カミヒロバは、カードゲーマーのための記事投稿サービスです。デッキ・コンボ紹介や、イベント参加ログ、コレクション紹介など、カードゲームに関するあらゆる活動を記録・共有することができます。</h2>
+            <a href="{% url 'account_login' %}" class="btn btn-primary btn-xl rounded-pill mt-5">ログイン</a>
+        </div>
+    </div>
+    <div class="bg-oval- bg-oval"></div>
+    <div class="bg-oval- bg-oval"></div>
+    <div class="bg-oval- bg-oval"></div>
+    <div class="bg-oval- bg-oval"></div>
+</header>
+{% endblock %}
+
+{% block contents %}
+
+{% endblock %}

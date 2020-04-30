@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Hiroba
+
+admin.site.register(Hiroba)

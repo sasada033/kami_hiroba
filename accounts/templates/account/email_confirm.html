@@ -1,0 +1,29 @@
+
+{% extends 'khpost/base.html' %}
+
+{% block title %}新規登録確認 | カミヒロバ{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="my-div-style">
+            <h1>ユーザー登録</h1>
+
+            {% if confirmation %}
+
+            <p>ユーザー登録を確定するには、以下のボタンを押してください。</p>
+
+            <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+                {% csrf_token %}
+                <button class="btn btn-primary" type="submit">確定</button>
+            </form>
+            {% else %}
+
+            {% url 'account_email' as email_url %}
+            <p>リンクの有効期限が切れています。<a href="{{ email_url }}">再申請</a>.</p>
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

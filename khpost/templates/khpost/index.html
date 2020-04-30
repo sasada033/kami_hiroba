@@ -1,0 +1,26 @@
+{% extends 'khpost/base.html' %}
+
+{% load static %}
+
+{% block title %}カミヒロバ{% endblock %}
+
+{% block content %}
+<div class="wrapper-top">
+    <div class="container">
+        <div class="top-left">
+            <h1 class="top-logo">カミヒロバ</h1>
+            <p class="top-subtitle">カミヒロバは、カードゲーマーのための記事投稿サービスです。デッキ・コンボ紹介や、イベント参加ログ、コレクション紹介など、カードゲームに関するあらゆる活動を記録・共有することができます。</p>
+        </div>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <p><a href="{% url 'khpost:khpost_list' %}">新着記事一覧</a></p>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <p><a href="{% url 'khpost:khpost_create' %}">新規作成</a></p>
+    </div>
+</div>
+{% endblock %}

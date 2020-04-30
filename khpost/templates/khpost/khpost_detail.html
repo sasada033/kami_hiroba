@@ -1,0 +1,30 @@
+{% extends 'khpost/base.html' %}
+
+{% load static %}
+
+{% block title %}カミヒロバ | 記事詳細{% endblock %}
+
+{% block content %}
+<div class="wrapper-items">
+    <div class="container">
+        <article class="article-detail">
+            <h1>{{ postmodel.title }}</h1>
+            <p>{{ postmodel.writer }}</p>
+            <p>{{ postmodel.created_at }}</p>
+            <p>{{ postmodel.updated_at }}</p>
+            <p>{{ postmodel.game }}</p>
+            <p>{{ postmodel.likes.count }}いいね</p>
+            <p>{% for tag in postmodel.tags.all %}{{ tag }},{% endfor %}</p>
+            <hr>
+            <div>
+                {{ postmodel.content | linebreaks | urlize}}
+            </div>
+        </article>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <p><a href="{% url 'khpost:khpost_update' postmodel.pk %}">編集</a></p>
+    </div>
+</div>
+{% endblock %}
