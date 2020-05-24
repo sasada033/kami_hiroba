@@ -43,7 +43,7 @@ header {
     height: 57px;
     width: 100%;
     background-color: rgba(255,191,0,1);
-    border-bottom: solid 1px #b3b3b3;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
     position: fixed;
     z-index: 10;
 }
@@ -57,16 +57,24 @@ header {
     justify-content: space-between;
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .header-logo a {
     font-weight: bold;
     font-size: 1.8rem;
     line-height: 57px;
-    margin: 0 25px;
+    margin: 0 15px;
     color: #3e3e3e;
 }
 
 .header-right {
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .header-link {
@@ -77,8 +85,40 @@ header {
 
 .header-link li a {
     font-size: 1.8rem;
-    margin: 0 25px;
+    margin: 0 8px;
     color: #3e3e3e;
+}
+
+#search-form form {
+    padding: 0;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+.form-control {
+    border: 1px solid #c4ccce;
+    border-radius: 3px;
+    box-shadow: none;
+    font-size: 1.4rem;
+    height: 40px;
+    padding: 6px 12px;
+    line-height: 1.5;
+    vertical-align: middle;
+}
+
+.post-keyword .card-search-keyword{
+    width: 280px;
+}
+
+.post-gametitle .card-search-gametitle{
+    width: 215px;
+    padding: 3px;
+}
+
+.search-button {
+    position: absolute;
+    cursor: pointer;
 }
 
 footer {
@@ -135,4 +175,20 @@ footer {
     padding-left: 16px;
 }
 
+.like-btn {
+    cursor: pointer;
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    color: #F75D5D;
+    text-align: center;
+    background: #fff;
+    border: solid 1px #F75D5D;
+    border-radius: 10px;
+    padding: 10px;
+}
 
+.on {
+    background: #F75D5D;
+    color: #fff;
+}

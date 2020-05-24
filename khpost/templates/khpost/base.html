@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load sass_tags %}
+{% load khpost %}
 
 <html lang="ja">
     <head>
@@ -20,12 +21,16 @@
                             <div class="header-logo">
                                 <a href="{% url 'khpost:index' %}">カミヒロバ</a>
                             </div>
+                            {% create_search_form request %}
                         </div>
                         <div class="header-right">
                             <ul class="header-link">
+                                {% if user.is_authenticated %}
                                 <li><a href="{% url 'account_logout' %}">ログアウト</a></li>
+                                {% else %}
                                 <li><a href="{% url 'account_login' %}">ログイン</a></li>
                                 <li><a href="{% url 'account_signup' %}">新規登録</a></li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -70,5 +75,7 @@
                 </div>
             </footer>
         </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+     {% block scripts %}{% endblock %}
     </body>
 </html>

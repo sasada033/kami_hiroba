@@ -24,11 +24,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '+d*(09opbd)3o4^*_e*61ma_e&y$d)o5cyzslcvyu*%0rt3d$u'
 
-
-
-
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,23 +33,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'django.contrib.sites',
 
-    'hiroba.apps.HirobaConfig',
+    'khpost.apps.KhpostConfig',
     'accounts.apps.AccountsConfig',
     'contact.apps.ContactConfig',
-    'khpost.apps.KhpostConfig',
+    'editor.apps.EditorConfig',
+    'hiroba.apps.HirobaConfig',
 
-    'django.contrib.sites',
+    'debug_toolbar',
     'allauth',
     'allauth.account',
-
     'sass_processor',
     'ckeditor',
     'ckeditor_uploader',
-
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -154,7 +151,7 @@ MESSAGE_TAGS = {
 }
 
 # 使用するユーザーモデル
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'accounts.User'
 
 # django-allauthで利用するdjango.contrib.sitesを使うためにサイト識別用IDを設定
 SITE_ID = 1
@@ -166,13 +163,20 @@ AUTHENTICATION_BACKENDS = (
     # 管理サイト用（ユーザー名認証）
 )
 
-# メールアドレス認証に変更する設定
+# 「メールアドレス&パスワードでログイン」 に変更する設定
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+
+# usernameをログイン時に使用しない
 ACCOUNT_USERNAME_REQUIRED = False
 
 # サインアップにメールアドレス確認をはさむように設定
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_EMAIL_REQUIRED = True
+
+# サインアップ時に追加項目を保存する設定
+ACCOUNT_FORMS = {
+    'signup': 'accounts.forms.MyCustomSignupForm',
+}
 
 # ログイン/ログアウト後の遷移先を設定
 LOGIN_REDIRECT_URL = 'khpost:index'

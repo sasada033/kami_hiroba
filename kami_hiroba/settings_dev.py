@@ -46,3 +46,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # 開発中のメディアルート
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# django-debug-toolbar 設定
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

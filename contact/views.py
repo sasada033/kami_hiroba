@@ -6,6 +6,7 @@ from . forms import ContactForm
 
 logger = logging.getLogger(__name__)  # ログ出力
 
+
 class InquiryView(generic.FormView):
     """お問い合わせページ用ビュー"""
 
@@ -18,6 +19,7 @@ class InquiryView(generic.FormView):
         messages.success(self.request, 'メッセージを送信しました。')
         logger.info('Inquiry sent by {}'.format(form.cleaned_data['name']))
         return super().form_valid(form)
+
 
 class InquiryThanksView(generic.TemplateView):
     """お問い合わせありがとうございますページ用ビュー"""

@@ -3,6 +3,7 @@ from django import forms
 from django.core.mail import EmailMessage
 from .models import Hiroba
 
+
 class InquiryForm(forms.Form):
     name = forms.CharField(label='お名前', max_length=30)
     email = forms.EmailField(label='メールアドレス')
@@ -39,6 +40,7 @@ class InquiryForm(forms.Form):
 
         message = EmailMessage(subject=subject, body=message, from_email=from_email, to=to_list, cc=cc_list)
         message.send()
+
 
 class HirobaCreateForm(forms.ModelForm):
     class Meta:

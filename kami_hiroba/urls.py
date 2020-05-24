@@ -16,8 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.staticfiles.urls import static
 from django.urls import path, include
-
 from . import settings_common, settings_dev
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,8 +25,17 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('contact/', include('contact.urls')),
     path('hiroba/', include('hiroba.urls')),
+    path('settings/', include('accounts.urls')),
+    path('editor/', include('editor.urls')),
     path('', include('khpost.urls')),
 ]
 
 # 開発サーバでメディアを配信できるようにする設定
 urlpatterns += static(settings_common.MEDIA_URL, document_root=settings_dev.MEDIA_ROOT)
+
+# django-debug-toolbar アクティブ設定
+if settings_dev.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

@@ -1,6 +1,7 @@
 from django import forms
 from django.core.mail import EmailMessage
 
+
 class ContactForm(forms.Form):
     """お問い合わせフォーム"""
 
