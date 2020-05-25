@@ -107,16 +107,24 @@ def khpost_create_view(request):
                 # PostModelを保存  # commit=Falseでuserを登録
                 new_post.writer = request.user
                 new_post.save()
-                # TagModelを保存  # commit=Falseでnew_tagオブジェクトを取得  # フォームセットひとつひとつに対してsave()
-                new_tag = tag_form.save(commit=False)
-                for new in new_tag:
-                    new.save()
-                # saveしたレコードをPostModel,TagModelそれぞれから取得
-                p = PostModel.objects.get(id=new_post.id)
-                tags = [TagModel.objects.get(id=tag.id) for tag in new_tag]
-                # PostModelのtagsフィールドにタグをadd()で紐づける
-                for t in tags:
-                    p.tags.add(t)
+
+                # TagModelを手動で保存するための準備(save()を使わない)
+                # たったいまsaveしたレコードをPostModelから取得
+                p = get_object_or_404(
+                    PostModel.objects.select_related('writer', 'game').prefetch_related('tags', 'likes', 'bookmarks'),
+                    id=new_post.id
+                )
+
+                # たったいま入力されたタグのリスト  # if dataでNull値を回避
+                input_tag = [data.get('name') for data in tag_form.cleaned_data if data]
+
+                # input_tagをadd()でPostModelに紐づける
+                # 既にTagModelにinput_tagが登録されている場合はget、そうでない場合はcreate処理(get_or_create())
+                if input_tag:
+                    for nt in input_tag:
+                        obj, created = TagModel.objects.get_or_create(name=nt)  # createdには真偽値が入る
+                        p.tags.add(obj)
+
                 # リダイレクト後のメッセージ
                 messages.success(request, '記事を保存しました。')
                 return redirect('khpost:khpost_list')
@@ -138,9 +146,10 @@ def khpost_create_view(request):
 def khpost_update_view(request, pk):
     """記事更新ビュー"""
 
-    instance = get_object_or_404(PostModel, pk=pk)  # post_formの初期値
-    current_tag = instance.tags.all()  # 現在のタグ
-    print(current_tag)
+    # post_formの初期値
+    instance = get_object_or_404(
+        PostModel.objects.select_related('writer', 'game').prefetch_related('tags', 'likes', 'bookmarks'), pk=pk
+    )
     post_form = PostCreateForm(request.POST or None, instance=instance)
     context = {
         'post_form': post_form,
@@ -149,25 +158,30 @@ def khpost_update_view(request, pk):
     if request.method == 'POST' and post_form.is_valid():
         new_post = post_form.save(commit=False)
         tag_form = TagCreateFormSet(request.POST)  # 登録処理に渡されたタグ
-        print(tag_form)
 
         if tag_form.is_valid():
             with transaction.atomic():  # with節内をトランザクションに含める(エラー時にDBが汚れるのを防止)
                 # PostModelを保存
                 new_post.save()
-                # TagModelを保存  # commit=Falseでnew_tagオブジェクトを取得  # フォームセットひとつひとつに対してsave()
-                new_tag = tag_form.save(commit=False)
-                for new in new_tag:
-                    new.save()
 
+                # TagModelを手動で保存するための準備(save()を使わない)
+                current_tag = list(instance.tags.values_list('name', flat=True))  # 現在DBに登録されているタグのリスト
+                input_tag = [data.get('name') for data in tag_form.cleaned_data if data]  # たったいま入力されたタグのリスト
+                old_tag = list(set(current_tag) - set(input_tag))  # 使わなくなったタグのリスト
+                new_tag = list(set(input_tag) - set(current_tag))  # 新規追加されたタグのリスト
 
-                # saveしたレコードをPostModel,TagModelそれぞれから取得
-                p = PostModel.objects.get(id=new_post.id)
-                tags = [TagModel.objects.get(id=tag.id) for tag in new_tag]
-                # PostModelのtagsフィールドにタグをadd()で紐づける  # 既に設定されたタグをclear()で一度消去
-                p.tags.clear()
-                for t in tags:
-                    p.tags.add(t)
+                # PostModelのtagsフィールドからold_tagを除外し、同フィールドにnew_tagを追加
+                # old_tagの紐づけをremove()で解除（TagModelからは削除されない）
+                if old_tag:
+                    for ot in old_tag:
+                        instance.tags.remove(get_object_or_404(TagModel, name=ot))
+                # new_tagをadd()で紐づける
+                # 既にTagModelにnew_tagが登録されている場合はget、そうでない場合はcreate処理(get_or_create())
+                if new_tag:
+                    for nt in new_tag:
+                        obj, created = TagModel.objects.get_or_create(name=nt)
+                        instance.tags.add(obj)
+
                 # リダイレクト後のメッセージ
                 messages.success(request, '記事を更新しました。')
                 return redirect('khpost:khpost_list')
@@ -178,28 +192,11 @@ def khpost_update_view(request, pk):
 
     else:  # request.GET時
         context.update({
-            'tag_form': TagCreateFormSet(queryset=current_tag),  # PostModelに紐づいたTagModelを取得
+            'tag_form': TagCreateFormSet(queryset=instance.tags.all()),  # PostModelに紐づいたTagModelを取得
             'card_form': CardSearchForm(),
         })
 
     return render(request, 'khpost/khpost_update.html', context)
-# class KhpostUpdateView(LoginRequiredMixin, generic.UpdateView):
-#     """記事更新ビュー"""
-#
-#     model = PostModel
-#     form_class = PostCreateForm
-#     template_name = 'khpost/khpost_update.html'
-#
-#     def get_success_url(self):
-#         return reverse_lazy('khpost:khpost_detail', kwargs={'pk': self.kwargs['pk']})
-#
-#     def form_valid(self, form):
-#         messages.success(self.request, '記事を更新しました。')
-#         return super().form_valid(form)
-#
-#     def form_invalid(self, form):
-#         messages.error(self.request, '入力された内容に不備があります。ご確認下さい。')
-#         return super().form_invalid(form)
 
 
 class KhpostDeleteView(LoginRequiredMixin, generic.DeleteView):

@@ -6,7 +6,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 class GameTitleModel(models.Model):
     """ゲームタイトル名保存モデル"""
 
-    name = models.CharField(verbose_name='ゲームタイトル名', max_length=255, unique=True)
+    name = models.CharField(verbose_name='ゲームタイトル名', max_length=50, unique=True)
 
     def __str__(self):
         return self.name
@@ -15,7 +15,7 @@ class GameTitleModel(models.Model):
 class TagModel(models.Model):
     """タグ名保存モデル"""
 
-    name = models.CharField(verbose_name='タグ名', max_length=255)
+    name = models.CharField(verbose_name='タグ名', max_length=50, blank=True)
 
     def __str__(self):
         return self.name
@@ -25,7 +25,7 @@ class PostModel(models.Model):
     """記事投稿モデル"""
 
     title = models.CharField(
-        verbose_name='タイトル', max_length=255
+        verbose_name='タイトル', max_length=150
     )
     writer = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.PROTECT, verbose_name='投稿者', related_name='postmodel_writer_set'
