@@ -2,12 +2,35 @@ import requests
 # from .db_set import DB
 from bs4 import BeautifulSoup
 import lxml.html
+import time
 import re
 import csv
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver import Chrome, ChromeOptions
+from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+
+
+def selenium_driver_set():
+    """seleniumのセットアップ"""
+
+    options = ChromeOptions()  # オプション設定オブジェクトの生成
+    # options.headless = True  # ヘッドレスモードの切り替え
+
+    # WebDriverオブジェクトの生成
+    # driver = Chrome(options=options)  # 仮想マシンを利用しない場合アクティブ
+    driver = WebDriver(
+        executable_path='C:/Users/sasada/Desktop/python/chromedriver_win32/chromedriver.exe', options=options
+    )  # 仮想マシンを利用する場合アクティブ
+
+    return driver
 
 
 def ws_crawl():
-    url = "https://ws-tcg.com/cardlist/search?page=1109"  # WS公式カードリストURL
+    """ヴァイスシュヴァルツ用クローラー"""
+
+    url = "https://ws-tcg.com/cardlist/search?page=2"  # WS公式カードリストURL
     res = requests.get(url)
     soup = BeautifulSoup(res.content, 'lxml')  # 第二引数はパーサ
     # lxml_data = lxml.html.fromstring(res.text)
@@ -54,7 +77,7 @@ def ws_crawl():
 
         csv_child = []  # 子配列を定義
 
-        # カード名:例 晴れ着のななか
+        # カード名:例 晴れ着のななか # フロントエンドに表示したいものをcsv_リストの先頭に(name推奨)
         name = td_.select('td > h4 > a > span:nth-of-type(1)')  # リスト型なのでname[0]で値を指定
         csv_child.append(name[0].text.strip())  # strip()で/nを削除
 
@@ -147,98 +170,103 @@ def ws_crawl():
     print(csv_)
 
     # CSVファイルをstaticディレクトリに作成(newline=''は出力時に改行の空白を切り詰める)
-    # with open('static/csv/ws_row.csv', 'w', encoding='utf-8', newline='') as f:
+    csv_url = 'static/csv/ws_row_001.csv'
+    with open(csv_url, 'w', encoding='utf-8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerows(csv_)
+
+
+def yg_crawl():
+    """遊戯王用クローラー"""
+
+    driver = selenium_driver_set()
+    url = "https://www.db.yugioh-card.com/yugiohdb/card_search.action"  # 遊戯王公式カード検索
+    driver.get(url)
+
+    # タイトルに'遊戯王'が含まれていることを確認
+    # assert '遊戯王' in driver.title
+
+    # ボタンを押す
+    split_btn = driver.find_element_by_css_selector('a.other:nth-of-type(8)')
+    split_btn.click()
+    search_btn = driver.find_element_by_css_selector('a.black_btn')
+    search_btn.click()
+
+    time.sleep(3)
+    # assert '検索結果' in driver.title
+
+    html = driver.page_source.encode('utf-8')
+    soup = BeautifulSoup(html, 'lxml')
+
+    csv_ = []  # 親配列を定義
+
+    li_list = soup.select(
+        'article > div#article_body > table > tbody > tr > td > div.list_style > ul.box_list > li'
+    )  # テーブル要素を取得
+
+    for li_ in li_list:  # 各<td>タグに対し、
+
+        csv_child = []  # 子配列を定義
+
+        # カード名:例 阿修羅
+        name = li_.select('li > dl > .box_card_name > span:nth-of-type(2)')
+        csv_child.append(name[0].text.strip())  # strip()で両端の/n等を削除
+
+        # ルビ:例 アスラ
+        reading = li_.select('li > dl > .box_card_name > span:nth-of-type(1)')  # リスト型なのでname[0]で値を指定
+        csv_child.append(reading[0].text.strip())
+
+        # 属性:例 光
+        element = li_.select('li > dl > .box_card_spec > span:nth-of-type(1) > span')
+        csv_child.append(element[0].text.strip()[:-2])
+
+        # レベル:例 4
+        level = li_.select('li > dl > .box_card_spec > span:nth-of-type(2) > span')
+        csv_child.append(level[0].text.strip()[3:])
+
+        # 種族:例 【 天使族 ／ スピリット ／ 効果 】
+        species = li_.select('li > dl > .box_card_spec > span:nth-of-type(3)')
+        csv_child.append(''.join(species[0].text.strip().split()))  # split()で\n\tを除去した後join()で一行に結合
+
+        # 攻撃力:例 1700
+        attack = li_.select('li > dl > .box_card_spec > span:nth-of-type(4)')
+        csv_child.append(attack[0].text.strip()[3:])
+
+        # 防御力:例 1200
+        defence = li_.select('li > dl > .box_card_spec > span:nth-of-type(5)')
+        csv_child.append(defence[0].text.strip()[3:])
+
+        # テキスト:例 このカードは特殊召喚できない。
+        text = li_.select('li > dl > .box_card_text')
+        csv_child.append(text[0].text.strip().translate(str.maketrans({'①': '(1)', '②': '(2)', '③': '(3)'})))
+        # translateで特定の1文字を別の1文字に変換
+
+        csv_.append(csv_child)  # 子配列を親配列に追加
+
+    print(csv_)
+
+    driver.quit()
+
+    # CSVファイルをstaticディレクトリに作成(newline=''は出力時に改行の空白を切り詰める)
+    # csv_url = 'static/csv/yg_row_001.csv'
+    # with open(csv_url, 'w', encoding='utf-8', newline='') as f:
     #     writer = csv.writer(f)
     #     writer.writerows(csv_)
 
+
+if __name__ == '__main__':
+    # モジュール実行時のスクレイピング処理
+    ws_crawl()
+    # yg_crawl()
+
+
+# # テーブルの作成処理
 # def create_table():
-#     # テーブルの作成処理
-#     db = DB('kami_hiroba')
+#     db = DB('iddata')
 #     db.execute_sql(
 #         "CREATE TABLE idol_group_name (idol_group_id integer PRIMARY KEY, idol_group_name varchar(255)) WITH OIDS;"
 #     )
 #     db.close()
-#
-
-
-if __name__ == '__main__':
-    # # テーブルの作成処理（初回のみ実行する）
-    # create_table()
-    # スクレイピング処理
-    ws_crawl()
-
-# import requests
-# from bs4 import BeautifulSoup
-# import re
-# import difflib
-# from .db_set import DB
-# from urllib.parse import urljoin
-#
-#
-# class WikiCrawl:
-#     def __init__(self):
-#         pass
-#
-#     # アイドルグループのwikipediaのURLを取得
-#     def idol_group_wiki_url(self):
-#         db = DB('iddata')
-#         # 女性アイドルグループのURL
-#         base_url = 'https://ja.wikipedia.org/wiki/%E6%97%A5%E6%9C%AC%E3%81%AE%E5%A5%B3%E6%80%A7%E3%82%A2%E3%82%A4%E3%83%89%E3%83%AB%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97%E3%81%AE%E4%B8%80%E8%A6%A7'
-#         r = requests.get(base_url)
-#         content = r.content
-#         soup = BeautifulSoup(content, 'html.parser')
-#
-#  # すべての該当クラスの<div>タグをリストで返す ex. [<div class="hoge">～</div>, <div>～</div>,...,<div>～</div>]
-#         divs = soup.find_all('div', class_='div-col columns column-count column-count-2')
-#
-#         # 各<div>タグの要素から<a>タグを抜き出し、グループコード,グループ名,URLを抜き出す(80,90年代はパス）
-#         for div in divs[2:]:
-#             idol_groups = div.find_all('a')
-#             for idol_group in idol_groups:
-#
-#                 # 相対パスを絶対パスに変換して取得
-#                 url = urljoin(base_url, idol_group.get('href'))
-#                 name = idol_group.text
-#
-#                 # データベースに登録済みか確認
-#                 pass_url = list()
-#                 pass_url.extend(db.select('SELECT url FROM idol_group_wiki_url;'))
-#                 pass_url.extend(db.select('SELECT url FROM not_idol_group_wiki_url;'))
-#                 if url in pass_url:
-#                     continue
-#
-#                 # idol_group_idを設定
-#                 max_id = db.select('SELECT MAX(idol_group_id) FROM idol_group_name;')[0]
-#                 if max_id is None:
-#                     id = 1
-#                 else:
-#                     id = max_id + 1
-#
-#                 # データベースへの登録処理
-#                 print(id, name, url)
-#                 command = input('新規アイドルグループに登録しますか？ (y/n/skip) >>')
-#                 if command is 'y':
-#                     db.insert('INSERT INTO idol_group_name (idol_group_id, idol_group_name) VALUES (%s,%s)', [id, name])
-#                     db.insert('INSERT INTO idol_group_wiki_url (idol_group_id, url) VALUES (%s,%s)', [id, url])
-#                     print('登録しました')
-#                 elif command is 'n':
-#                     db.insert('INSERT INTO not_idol_group_wiki_url (not_idol_group_name, url) VALUES (%s,%s)', [name, url])
-#                     print('URLを除外リストに挿入しました')
-#                 else:
-#                     print('スキップしました')
-#
-#         db.close()
-#
-#
-# # テーブルの作成処理
-# def create_table():
-#     db = DB('iddata')
-#     db.execute_sql("CREATE TABLE idol_group_name (idol_group_id integer PRIMARY KEY, idol_group_name varchar(255)) WITH OIDS;")
-#     db.execute_sql("CREATE TABLE idol_group_wiki_url (idol_group_id integer PRIMARY KEY, url varchar(255)) WITH OIDS;")
-#     db.execute_sql("CREATE TABLE not_idol_group_wiki_url (not_idol_group_name varchar(255), url varchar(255)) WITH OIDS;")
-#     db.execute_sql("CREATE TABLE idol_group_twitter_url (idol_group_id integer, twitter_name varchar(255), url varchar(255), account_type varchar(255)) WITH OIDS;")
-#     db.close()
-#
 #
 # if __name__ == '__main__':
 #     # テーブルの作成処理（初回のみ実行する）
