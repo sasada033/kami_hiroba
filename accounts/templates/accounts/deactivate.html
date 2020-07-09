@@ -1,0 +1,19 @@
+{% extends 'khpost/base.html' %}
+
+{% load static %}
+
+{% block title %}カミヒロバ | 退会{% endblock %}
+
+{% block content %}
+<div class="wrapper-items">
+    <div class="container">
+        <form action="" method="POST">
+            <p>退会する場合はパスワードを入力</p>
+            {{ form.as_p }}
+            {% csrf_token %}
+            <button type="submit">退会</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

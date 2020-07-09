@@ -1,0 +1,26 @@
+{% extends 'khpost/base.html' %}
+
+{% load static %}
+{% load khpost %}
+
+{% block title %}カミヒロバ | 記事一覧{% endblock %}
+
+{% block content %}
+<div class="wrapper-items">
+    <div class="container">
+        <section>
+            {% for postmodel in postmodel_list %}
+            <article>
+                <h2><a href="{% url 'khpost:khpost_detail' postmodel.pk %}">{{ postmodel.title }}</a></h2>
+                <a href="{% url 'khpost:khpost_profile' postmodel.writer.username %}">{{ postmodel.writer }}</a>
+                <p>{{ postmodel.created_at | timesince | split_timesince:',' }}前 -</p>
+                <p>{{ postmodel.game }}</p>
+            </article>
+            {% endfor %}
+        </section>
+    </div>
+</div>
+
+{% include 'khpost/pagination.html' %}
+
+{% endblock %}

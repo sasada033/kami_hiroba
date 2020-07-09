@@ -1,0 +1,28 @@
+{% extends 'khpost/base.html' %}
+
+{% block title %}お問い合わせ | カミヒロバ{% endblock %}
+
+{% block content %}
+<div class="wrapper-items">
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}">
+                    <strong>{{ field.label_tag }}</strong>
+                </label>
+                <div>
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            </div>
+            {% endfor %}
+            <button type="submit">送信</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

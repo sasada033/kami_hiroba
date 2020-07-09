@@ -1,0 +1,16 @@
+{% extends 'khpost/base.html' %}
+
+{% load static %}
+
+{% block title %}カミヒロバ | 記事削除{% endblock %}
+
+{% block content %}
+<div class="wrapper-items">
+    <div class="container">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <button type="submit">削除</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

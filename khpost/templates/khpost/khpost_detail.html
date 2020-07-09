@@ -1,0 +1,76 @@
+{% extends 'khpost/base.html' %}
+
+{% load static %}
+
+{% block title %}カミヒロバ | 記事詳細{% endblock %}
+
+{% block content %}
+<div class="wrapper-items">
+    <div class="container">
+        <article class="article-detail">
+            <h1>{{ postmodel.title }}</h1>
+            <p>{{ postmodel.writer }}</p>
+            <p>{{ postmodel.created_at | date:'Y/m/d' }}に公開</p>
+            <p>{{ postmodel.updated_at | date:'Y/m/d' }}に更新</p>
+            <p>{{ postmodel.game }}</p>
+            <p>{% for tag in postmodel.tags.all %}{{ tag }},{% endfor %}</p>
+            <div class="like-btn {% if like_active %}on{% endif %}"{% if user.is_authenticated %} data-href="{% url 'khpost:khpost_like' postmodel.pk %}"{% endif %}>
+                <div class="liked-cnt">
+                    {{ postmodel.likes.count }}
+                </div>
+            </div>
+            <p>↑いいね↑</p>
+            <hr>
+            <div>
+                {{ postmodel.content | safe | linebreaks | urlize }}
+            </div>
+        </article>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <hr>
+        {% for comment in postmodel.commentmodel_set.all %}
+        <div class="container">
+            <p>{{ comment.created_at | date:'Y-m-d H:i' }}</p>
+            <p>{{ comment | linebreaks | urlize }}</p>
+        </div>
+        {% empty %}
+        <p>コメントはありません</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="wrapper-items">
+    <div class="container">
+        <p><a href="{% url 'khpost:khpost_update' postmodel.pk %}">編集</a></p>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <p><a href="{% url 'khpost:khpost_profile' postmodel.writer.username %}">ユーザー詳細</a></p>
+    </div>
+</div>
+{% if user.is_authenticated %}
+<div class="wrapper-items">
+    <div class="container">
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">コメントする</button>
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<script src="{% static 'js/khpost_likes.js' %}"></script>
+<script>
+$("a.jquery-disabled").click(function() {
+    return false;
+});
+</script>
+{% endblock %}

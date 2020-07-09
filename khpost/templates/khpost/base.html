@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+{% load static %}
+{% load sass_tags %}
+{% load khpost %}
+
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'css/kh.css' %}">
+        <link rel="stylesheet" href="{% static 'css/contents.css' %}">
+        <link rel="stylesheet" href="{% sass_src 'scss/kh.scss' %}">
+    </head>
+    <body>
+        <div class="wrapper-all">
+            <header>
+                <div class="header-fixed">
+                    <div class="header-container">
+                        <div class="header-left">
+                            <div class="header-logo">
+                                <a href="{% url 'khpost:index' %}">カミヒロバ</a>
+                            </div>
+                            {% create_search_form request %}
+                        </div>
+                        <div class="header-right">
+                            <ul class="header-link">
+                                {% if user.is_authenticated %}
+                                <li><a href="{% url 'account_logout' %}">ログアウト</a></li>
+                                {% else %}
+                                <li><a href="{% url 'account_login' %}">ログイン</a></li>
+                                <li><a href="{% url 'account_signup' %}">新規登録</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {% if messages %}
+            <div class="messages">
+                <div class="container">
+                    <div class="">
+                        <ul class="messages-list">
+                            {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                                {{ message }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+
+            <footer>
+                <div class="footer-container">
+                    <div class="footer-left">
+                        <h2>カミヒロバ</h2>
+                        <p>Place For All CardGamers.</p>
+                    </div>
+                    <div class="footer-right">
+                        <h3>カミヒロバ</h3>
+                        <ul class="footer-link">
+                            <li><a href="#">カミヒロバとは</a></li>
+                            <li><a href="#">利用規約</a></li>
+                            <li><a href="#">プライバシーポリシー</a></li>
+                            <li><a href="{% url 'contact:inquiry' %}">お問い合わせ</a></li>
+                            <li><a href="#">ヘルプ</a></li>
+                            <li><a href="#">ガイドライン</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+     {% block scripts %}{% endblock %}
+    </body>
+</html>

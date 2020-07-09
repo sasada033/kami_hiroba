@@ -1,0 +1,7 @@
+<section id="search-form">
+        <form action="{% url 'khpost:khpost_list' %}" method="GET">
+                {{ form.gametitle }}
+                {{ form.keyword }}
+            <input type="submit" class="form-control search-button" value="検索"/>
+        </form>
+</section>

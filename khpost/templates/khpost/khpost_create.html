@@ -1,0 +1,51 @@
+{% extends 'khpost/base.html' %}
+
+{% load static %}
+
+{% block title %}カミヒロバ | 記事作成{% endblock %}
+
+{% block content %}
+<div class="wrapper-items">
+    <div class="container">
+        <form action="" method="POST" enctype="multipart/form-data">
+            {{ post_form.media }}
+            {{ post_form.as_p }}
+            {% for tag in tag_form %}
+            {{ tag.as_p }}
+            {% endfor %}
+            {{ tag_form.management_form }}
+            {% csrf_token %}
+            <button type="submit">保存する</button>
+        </form>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <form>
+            <select size="20" id="card-appended-list"></select>
+            <button type="button" id="card-insert-button">追加</button>
+        </form>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <form id="card-search-form" action="{% url 'editor:editor_search' %}" method="GET">
+            {{ card_form.gametitle_card }}
+            {{ card_form.keyword_card }}
+            <input type="submit" class="form-control search-button" value="検索"/>
+        </form>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <div class="search-results">
+            <p class="error-message"></p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/editor_search.js' %}"></script>
+{% endblock %}

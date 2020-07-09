@@ -1,0 +1,7 @@
+media/
+backup/
+csv/
+.idea/
+*.log
+*.pyc
+.env
