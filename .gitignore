@@ -1,2 +1,7 @@
+media/
+hiroba/
+backup/
 .idea/
+*.log
 *.pyc
+.env

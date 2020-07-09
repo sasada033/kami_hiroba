@@ -1,5 +1,5 @@
 from django.db import models
-from django.conf import settings
+# from django.conf import settings
 
 
 class WeissSchwarz(models.Model):
@@ -61,37 +61,37 @@ class Yugioh(models.Model):
         return self.name
 
 
-class DeckListModel(models.Model):
-    """ユーザーに紐づくデッキリストモデル"""
-
-    title = models.CharField(
-        verbose_name='デッキ名', default='MyDeck', max_length=100
-    )
-    holder = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='ユーザー名'
-    )
-
-    weiss_schwarz = models.ManyToManyField(
-        WeissSchwarz, verbose_name='ヴァイスシュヴァルツ', blank=True
-    )
-    yugioh = models.ManyToManyField(
-        Yugioh, verbose_name='遊戯王', blank=True
-    )
-
-    is_public = models.IntegerField(
-        verbose_name='公開設定', choices=((0, '非公開'), (1, '公開'),), default=0
-    )
-
-    created_at = models.DateTimeField(verbose_name='作成日', auto_now_add=True)
-    updated_at = models.DateTimeField(verbose_name='最終更新日', auto_now=True)
-
-    def __str__(self):
-        return '{} by {}'.format(self.title, self.holder)
-
-
-class DeckLabel(models.Model):
-    """デッキリストのラベルモデル"""
-
-    deck = models.ForeignKey(DeckListModel, on_delete=models.CASCADE, verbose_name='デッキ名')
-    label = models.CharField(verbose_name='ラベル名', blank=True, max_length=30)
-    order = models.IntegerField(verbose_name='ラベル番号')
+# class DeckListModel(models.Model):
+#     """ユーザーに紐づくデッキリストモデル"""
+#
+#     title = models.CharField(
+#         verbose_name='デッキ名', default='MyDeck', max_length=100
+#     )
+#     holder = models.ForeignKey(
+#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='ユーザー名'
+#     )
+#
+#     weiss_schwarz = models.ManyToManyField(
+#         WeissSchwarz, verbose_name='ヴァイスシュヴァルツ', blank=True
+#     )
+#     yugioh = models.ManyToManyField(
+#         Yugioh, verbose_name='遊戯王', blank=True
+#     )
+#
+#     is_public = models.IntegerField(
+#         verbose_name='公開設定', choices=((0, '非公開'), (1, '公開'),), default=0
+#     )
+#
+#     created_at = models.DateTimeField(verbose_name='作成日', auto_now_add=True)
+#     updated_at = models.DateTimeField(verbose_name='最終更新日', auto_now=True)
+#
+#     def __str__(self):
+#         return '{} by {}'.format(self.title, self.holder)
+#
+#
+# class DeckLabel(models.Model):
+#     """デッキリストのラベルモデル"""
+#
+#     deck = models.ForeignKey(DeckListModel, on_delete=models.CASCADE, verbose_name='デッキ名')
+#     label = models.CharField(verbose_name='ラベル名', blank=True, max_length=30)
+#     order = models.IntegerField(verbose_name='ラベル番号')
