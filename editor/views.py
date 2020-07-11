@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .models import WeissSchwarz, Yugioh
+from storage.models import WeissSchwarz, Yugioh
 
 
 @login_required
@@ -30,16 +30,27 @@ def card_search_view(request):
                 text__icontains=keyword
             )
         ).values_list(
-            'name', 'num', 'title', 'side', 'kind', 'level', 'color', 'power', 'soul', 'cost',
-            'rarity', 'trigger', 'identity', 'flavor', 'text',
+            # 'name', 'num', 'title', 'side', 'kind', 'level', 'color', 'power', 'soul', 'cost',
+            # 'rarity', 'trigger', 'identity', 'flavor', 'text',
         ).distinct()[0:15]
         # Q()|...OR演算子, icontains...部分一致, distinct()...重複削除, [0:15]...先頭から15件まで取得
         # values_list()...json形式に対応できるようクエリセットをタプルで出力
 
         if results:
-            data = {'queryset': list(results)}
+            pk_list = []
+            queryset = []
+            for result in list(results):
+                pk_list.append(result.pop(0))
+                queryset.append(result)
+            data = {
+                'queryset': queryset,
+                'pk': pk_list
+            }
         else:
-            data = {'queryset': False}
+            data = {
+                'queryset': None,
+                'pk': []
+            }
 
         return JsonResponse(data)
 

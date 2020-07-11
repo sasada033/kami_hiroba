@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'contact.apps.ContactConfig',
     'editor.apps.EditorConfig',
+    'storage.apps.StorageConfig',
 
     'debug_toolbar',
     'allauth',
@@ -207,6 +208,10 @@ ACCOUNT_LOGOUT_REDIRECT_URL = 'khpost:index'
 
 # ログアウトリンクのクリック一発でログアウトする設定
 ACCOUNT_LOGOUT_ON_GET = True
+
+# メールアドレス確認後のリダイレクト先
+# プロフィールの初期設定
+# ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = ''
 
 
 # メディア設定

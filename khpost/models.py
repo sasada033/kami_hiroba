@@ -46,7 +46,7 @@ class PostModel(models.Model):
         settings.AUTH_USER_MODEL, verbose_name='ブックマーク', blank=True, related_name='post_bookmarks_set'
     )
     page_view = models.IntegerField(
-        verbose_name='PV数', default=0
+        verbose_name='累計PV数', default=0
     )
     is_public = models.IntegerField(
         verbose_name='公開設定', choices=((0, '非公開'), (1, '公開'),), default=0
@@ -84,3 +84,54 @@ class CommentModel(models.Model):
 
     def __str__(self):
         return '{}さんの{}へのコメント'.format(self.writer, self.target)
+
+
+class DailyTrendModel(models.Model):
+    """24時間の人気記事モデル"""
+
+    daily_post = models.OneToOneField(
+        PostModel, on_delete=models.CASCADE
+    )
+    daily_pv = models.IntegerField(
+        verbose_name='24時間PV数', default=0
+    )
+    path = models.URLField(
+        verbose_name='URL', blank=True
+    )
+
+    def __str__(self):
+        return '{}/{}views'.format(self.daily_post, self.daily_pv)
+
+
+class WeeklyTrendModel(models.Model):
+    """7日間の人気記事モデル"""
+
+    weekly_post = models.OneToOneField(
+        PostModel, on_delete=models.CASCADE
+    )
+    weekly_pv = models.IntegerField(
+        verbose_name='7日間PV数', default=0
+    )
+    path = models.URLField(
+        verbose_name='URL', blank=True
+    )
+
+    def __str__(self):
+        return '{}/{}views'.format(self.weekly_post, self.weekly_pv)
+
+
+class MonthlyTrendModel(models.Model):
+    """30日間の人気記事モデル"""
+
+    monthly_post = models.OneToOneField(
+        PostModel, on_delete=models.CASCADE
+    )
+    monthly_pv = models.IntegerField(
+        verbose_name='30日間PV数', default=0
+    )
+    path = models.URLField(
+        verbose_name='URL', blank=True
+    )
+
+    def __str__(self):
+        return '{}/{}views'.format(self.monthly_post, self.monthly_pv)
