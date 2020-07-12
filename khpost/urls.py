@@ -10,6 +10,5 @@ urlpatterns = [
     path('create/', views.khpost_create_view, name='khpost_create'),
     path('update/<int:pk>/', views.khpost_update_view, name='khpost_update'),
     path('delete/<int:pk>/', views.KhpostDeleteView.as_view(), name='khpost_delete'),
-    path('<slug:username>/', views.UserProfileIndexView.as_view(), name='khpost_profile'),
     path('like/<int:pk>/', views.khpost_like_view, name='khpost_like'),
 ]

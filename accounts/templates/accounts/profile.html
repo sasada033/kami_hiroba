@@ -32,6 +32,15 @@
         </section>
     </div>
 </div>
+<div class="wrapper-items">
+    <div class="container">
+        <div class="like-btn {% if like_active %}on{% endif %}"{% if user.is_authenticated %} data-href="{% url 'accounts:accounts_follow' user.userprofile.pk %}"{% endif %}>
+            <div class="liked-cnt">
+                {{ user.userprofile.follower.count }}
+            </div>
+        </div>
+    </div>
+</div>
 
 {% include 'khpost/pagination.html' %}
 

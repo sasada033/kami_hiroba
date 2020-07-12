@@ -5,7 +5,9 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
+from django.http import JsonResponse
 from .models import UserProfile
+from khpost.models import PostModel
 from .forms import UserProfileForm, DeactivateForm
 
 
@@ -32,6 +34,57 @@ def user_profile_change(request):
         'form': form,
     }
     return render(request, 'accounts/profile_change.html', context)
+
+
+class UserProfileIndexView(generic.DetailView):
+    """ユーザーインデックスビュー(プロフィール＆記事一覧)"""
+
+    model = User
+    queryset = model.objects.select_related('userprofile',)
+    template_name = 'accounts/profile.html'
+    slug_field = 'username'  # urlの末尾に対応するusernameを割り当てる
+    slug_url_kwarg = 'username'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        writer = get_object_or_404(self.model, username=self.kwargs.get('username'))  # ユーザーに紐づく記事の一覧取得
+        context.update({
+            'post_list': PostModel.objects.filter(
+                writer=writer, is_public=1
+            ).select_related(
+                'writer', 'game'
+            ).prefetch_related(
+                'tags', 'likes', 'bookmarks'
+            ),
+        })
+        return context
+
+
+@login_required
+def accounts_follow_view(request, pk):
+    """ユーザーフォローボタン処理ビュー"""
+
+    obj = get_object_or_404(UserProfile, pk=pk)
+    status = request.GET.get('status')
+    user = request.user
+
+    if user in obj.follower.all():  # そのユーザーを既にフォロー中の場合
+        if status:  # フォローボタン押下時(status=true)
+            obj.follower.remove(user)  # フォローリストからそのユーザーを除外
+            follow = False  # 非フォロー状態であることをテンプレートに伝達
+        else:
+            follow = True   # フォロー状態であることをテンプレートに伝達
+    else:  # そのユーザーをまだフォローしていない場合
+        if status:  # フォローボタン押下時(status=true)
+            obj.follower.add(user)  # フォローリストにそのユーザーを追加
+            follow = True  # フォロー状態であることをテンプレートに伝達
+        else:
+            follow = False  # 非フォロー状態であることをテンプレートに伝達
+
+    data = {
+        'follow': follow,
+    }
+    return JsonResponse(data)
 
 
 class DeactivateView(LoginRequiredMixin, generic.FormView):
