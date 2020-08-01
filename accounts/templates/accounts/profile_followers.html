@@ -1,0 +1,41 @@
+{% extends 'khpost/base.html' %}
+
+{% load static %}
+{% load khpost %}
+
+{% block title %}{{ user.username }} - カミヒロバ{% endblock %}
+
+{% block content %}
+
+<div class="wrapper-items">
+    <div class="container">
+        <p>{{ user.username }}</p>
+        <p>{{ profile.handle }}</p>
+        <p>{{ profile.description }}</p>
+        <p>{{ profile.location }}</p>
+        <p>{{ profile.mysite }}</p>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <div class="like-btn {% if like_active %}on{% endif %}"{% if user.is_authenticated %} data-href="{% url 'accounts:accounts_follow' profile.pk %}"{% endif %}>
+            <div class="liked-cnt">
+                {{ profile.follower.count }}
+            </div>
+            <p>↑フォロー↑</p>
+        </div>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <br>
+        {% for follower in profile.follower.all %}
+        <p>@{{ follower.username }}</p>
+        <a href="{% url 'khpost:accounts_profile' follower.username %}">この人のプロフィールを見る</a>
+        {% endfor %}
+    </div>
+</div>
+
+{% include 'khpost/pagination.html' %}
+
+{% endblock %}

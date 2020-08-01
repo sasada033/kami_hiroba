@@ -40,22 +40,43 @@ class UserProfileIndexView(generic.DetailView):
     """ユーザーインデックスビュー(プロフィール＆記事一覧)"""
 
     model = User
-    queryset = model.objects.select_related('userprofile',)
     template_name = 'accounts/profile.html'
     slug_field = 'username'  # urlの末尾に対応するusernameを割り当てる
-    slug_url_kwarg = 'username'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        writer = get_object_or_404(self.model, username=self.kwargs.get('username'))  # ユーザーに紐づく記事の一覧取得
+
+        # PostModel,UserProfile のクエリセットを取得
         context.update({
             'post_list': PostModel.objects.filter(
-                writer=writer, is_public=1
+                writer=kwargs.get('object'), is_public=1
             ).select_related(
                 'writer', 'game'
             ).prefetch_related(
                 'tags', 'likes', 'bookmarks'
             ),
+            'profile': get_object_or_404(
+                UserProfile.objects.prefetch_related('follower',), user_name=kwargs.get('object')
+            )
+        })
+        return context
+
+
+class UserProfileFollowersView(generic.DetailView):
+    """ユーザープロフィールフォロワービュー(プロフィール＆フォロワー一覧)"""
+
+    model = User
+    template_name = 'accounts/profile_followers.html'
+    slug_field = 'username'  # urlの末尾に対応するusernameを割り当てる
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # UserProfile のクエリセットを取得
+        context.update({
+            'profile': get_object_or_404(
+                UserProfile.objects.prefetch_related('follower', ), user_name=kwargs.get('object')
+            )
         })
         return context
 
@@ -82,7 +103,7 @@ def accounts_follow_view(request, pk):
             follow = False  # 非フォロー状態であることをテンプレートに伝達
 
     data = {
-        'follow': follow,
+        'followed': follow,
     }
     return JsonResponse(data)
 

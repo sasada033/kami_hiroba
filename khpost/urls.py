@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from accounts.views import UserProfileIndexView, UserProfileFollowersView
 
 app_name = 'khpost'
 
@@ -11,4 +12,6 @@ urlpatterns = [
     path('update/<int:pk>/', views.khpost_update_view, name='khpost_update'),
     path('delete/<int:pk>/', views.KhpostDeleteView.as_view(), name='khpost_delete'),
     path('like/<int:pk>/', views.khpost_like_view, name='khpost_like'),
+    path('<slug:slug>/', UserProfileIndexView.as_view(), name='accounts_profile'),
+    path('<slug:slug>/followers/', UserProfileFollowersView.as_view(), name='accounts_profile_followers'),
 ]
