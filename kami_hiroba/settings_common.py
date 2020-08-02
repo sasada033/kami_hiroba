@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'contact.apps.ContactConfig',
     'editor.apps.EditorConfig',
+    'storage.apps.StorageConfig',
 
     'debug_toolbar',
     'allauth',
@@ -196,6 +197,9 @@ ACCOUNT_USERNAME_REQUIRED = False
 # サインアップにメールアドレス確認をはさむように設定
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
+# メールアドレス確認後、自動的にログインする設定
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+
 # サインアップ時に追加項目を保存する設定
 ACCOUNT_FORMS = {
     'signup': 'accounts.forms.MyCustomSignupForm',
@@ -208,6 +212,10 @@ ACCOUNT_LOGOUT_REDIRECT_URL = 'khpost:index'
 # ログアウトリンクのクリック一発でログアウトする設定
 ACCOUNT_LOGOUT_ON_GET = True
 
+# メールアドレス確認後のリダイレクト先
+# プロフィールの初期設定
+# ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'accounts:settings_profile'
+# ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'accounts:settings_profile'
 
 # メディア設定
 

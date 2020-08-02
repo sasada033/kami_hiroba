@@ -1,0 +1,60 @@
+{% extends 'khpost/base.html' %}
+
+{% load static %}
+{% load khpost %}
+
+{% block title %}{{ user.username }} - カミヒロバ{% endblock %}
+
+{% block content %}
+
+<div class="wrapper-items">
+    <div class="container">
+        <p>{{ user.username }}</p>
+        <p>{{ profile.handle }}</p>
+        <p>{{ profile.description }}</p>
+        <p>{{ profile.location }}</p>
+        <p>{{ profile.mysite }}</p>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <section>
+            {% for post in post_list %}
+            <article>
+                <a href="{% url 'khpost:khpost_detail' post.pk %}">{{ post.title }}</a>
+                <p>{{ post.writer }}</p>
+                <p>{{ post.game }}</p>
+                <p>{{ post.created_at }}</p>
+                <p>{{ post.likes.count }}いいね</p>
+                <hr>
+            </article>
+            {% endfor %}
+        </section>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <div class="like-btn {% if followed %}on{% endif %}"{% if user.is_authenticated %} data-href="{% url 'accounts:accounts_follow' profile.pk %}"{% endif %}>
+            <div class="liked-cnt">
+                {{ profile.follower.count }}
+            </div>
+        </div>
+        <p>↑フォロー↑</p>
+        <a href="{% url 'khpost:accounts_profile_followers' user.username %}">フォロワー一覧</a>
+    </div>
+</div>
+
+{% include 'khpost/pagination.html' %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/@popperjs/core@2"></script>
+<script src="https://unpkg.com/tippy.js@6"></script>
+<script src="{% static 'js/khpost_follow.js' %}"></script>
+<script>
+$("a.jquery-disabled").click(function() {
+    return false;
+});
+</script>
+{% endblock %}

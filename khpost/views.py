@@ -211,30 +211,6 @@ class KhpostDeleteView(LoginRequiredMixin, generic.DeleteView):
         return super().delete(request, *args, **kwargs)
 
 
-class UserProfileIndexView(generic.DetailView):
-    """ユーザーインデックスビュー(プロフィール＆記事一覧)"""
-
-    model = User
-    queryset = model.objects.select_related('userprofile',)
-    template_name = 'khpost/khpost_profile.html'
-    slug_field = 'username'  # urlの末尾に対応するusernameを割り当てる
-    slug_url_kwarg = 'username'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        writer = get_object_or_404(self.model, username=self.kwargs.get('username'))  # ユーザーに紐づく記事の一覧取得
-        context.update({
-            'post_list': PostModel.objects.filter(
-                writer=writer, is_public=1
-            ).select_related(
-                'writer', 'game'
-            ).prefetch_related(
-                'tags', 'likes', 'bookmarks'
-            ),
-        })
-        return context
-
-
 @login_required
 def khpost_like_view(request, pk):
     """いいねボタン処理ビュー"""

@@ -46,13 +46,17 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.SlugField(
         _('username'),
-        max_length=32,
+        max_length=15,
         unique=True,
-        help_text='この項目は必須です。半角英数字および-_で3文字以上32文字以下にしてください。',
+        help_text='この項目は必須です。半角英数字および-_で3文字以上15文字以下にしてください。',
         validators=[MinLengthValidator(3)],
         error_messages={
             'unique': _("A user with that username already exists."),
         },
+    )
+
+    block_user = models.ManyToManyField(
+        'self', verbose_name='blocking user', blank=True, related_name='user_block_set'
     )
 
     is_staff = models.BooleanField(
@@ -93,13 +97,13 @@ class UserProfile(models.Model):
     """ユーザープロフィールモデル"""
 
     user_name = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='userprofile_user_name_set'
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile_user_set'
     )
     follower = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, verbose_name='フォロワー', blank=True, related_name='userprofile_follower_set'
+        settings.AUTH_USER_MODEL, verbose_name='フォロワー', blank=True, related_name='profile_follower_set'
     )
     handle = models.CharField(
-        verbose_name='ハンドルネーム', max_length=32, blank=True
+        verbose_name='ハンドルネーム', max_length=50, blank=True
     )
     icon = models.ImageField(
         upload_to='media', verbose_name='アイコン', blank=True
