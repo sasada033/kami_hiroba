@@ -1,12 +1,14 @@
 import psycopg2
+import os
 
 
 def copy_csv_to_db():
     """csvファイルをデータベースのテーブルにコピー"""
 
     # ヴァイスシュヴァルツ
-    csv_file_name = 'static/csv/ws_row_001.csv'
-    target_table_name = 'editor_weissschwarz'
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    csv_file_name = os.path.join(base_dir, 'static/csv/ws_row_002.csv')
+    target_table_name = 'storage_weissschwarz'
     target_table_columns = (
         'name', 'num', 'title', 'side', 'kind', 'level', 'color', 'power', 'soul', 'cost',
         'rarity', 'trigger', 'identity', 'flavor', 'text',
@@ -14,7 +16,7 @@ def copy_csv_to_db():
 
     # 遊戯王
     # csv_file_name = 'static/csv/yg_row.csv'
-    # target_table_name = 'editor_yugioh'
+    # target_table_name = 'storage_yugioh'
     # target_table_columns = (
     #     'name', 'reading', 'element', 'level', 'species', 'attack', 'defence', 'text',
     # )

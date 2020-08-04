@@ -5,4 +5,5 @@ app_name = 'editor'
 
 urlpatterns = [
     path('search/', views.card_search_view, name='editor_search'),
+    path('deck/', views.deck_create_view, name='editor_deck'),
 ]

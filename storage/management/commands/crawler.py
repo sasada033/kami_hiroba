@@ -5,6 +5,7 @@ import lxml.html
 import time
 import re
 import csv
+import os
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.chrome.webdriver import WebDriver
@@ -70,6 +71,9 @@ def ws_crawl():
     }
 
     csv_ = []  # 親配列を定義
+
+    for i in soup.select('br'):  # <br>タグを文字列'<br>'に変換しDBに登録できるようにする
+        i.replace_with('<br>')
 
     td_list = soup.select('.search-result-table > tbody > tr > td')  # テーブル要素を取得
 
@@ -170,7 +174,8 @@ def ws_crawl():
     print(csv_)
 
     # CSVファイルをstaticディレクトリに作成(newline=''は出力時に改行の空白を切り詰める)
-    csv_url = 'static/csv/ws_row_001.csv'
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    csv_url = os.path.join(base_dir, 'static/csv/ws_row_002.csv')
     with open(csv_url, 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
         writer.writerows(csv_)

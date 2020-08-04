@@ -39,6 +39,7 @@ class WeissSchwarz(models.Model):
     identity = models.CharField(verbose_name='特徴', blank=True, max_length=50)
     flavor = models.TextField(verbose_name='フレーバー', blank=True, max_length=255)
     text = models.TextField(verbose_name='テキスト', blank=True, max_length=500)
+    image = models.ImageField(verbose_name='画像', blank=True, null=True)
 
     def __str__(self):
         return '{} - {}'.format(self.name, self.num)
@@ -55,6 +56,7 @@ class Yugioh(models.Model):
     attack = models.IntegerField(verbose_name='攻撃力', blank=True)
     defence = models.IntegerField(verbose_name='防御力', blank=True)
     text = models.TextField(verbose_name='テキスト', blank=True, max_length=500)
+    image = models.ImageField(verbose_name='画像', blank=True, null=True)
 
     def __str__(self):
         return self.name

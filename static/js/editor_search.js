@@ -27,17 +27,23 @@ $("#card-search-form").submit(function(e) {
                     let span = $("<span>", {text: `「${keyword}」に一致するカードは見つかりませんでした。`});
                     search_results.prepend(span);  // エラーメッセージを表示
                 } else {
+                    let html_result = '';
                     for (let results of data.queryset) {  // querysetから値を取り出す
-                        for (let result of results) {
-                            let span = $("<span>", {text: result});  // 検索結果を表示
-                            search_results.append(span);
+                        let div_result = '<div class="">';
+                        let a = "<a>" + results[0] + "</a>";  // 検索結果を表示(カード名のみaタグ)
+                        div_result += a;
+                        for (let result of results.slice(1)) {
+                            let span = "<span>" + result + "</span>";  // 検索結果を表示(カード名以外spanタグ)
+                            div_result += span;
                         }
                         let button = $("<button>", {  // 検索結果ひとつひとつに選択ボタンを用意
                             type: "button", id: "card-append-button", "class": "form-control search-button",
                             value: results[0], text: "選択",
                         });
-                        search_results.append(button)
+                        div_result += "</div>";
+                        html_result += div_result;
                     }
+                    search_results[0].innerHTML = html_result;
                 }
             }, error: function(error) {
                 console.log("error")

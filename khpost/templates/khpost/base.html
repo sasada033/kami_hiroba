@@ -8,13 +8,33 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% block description %}{% endblock %}
+        {% block keyword %}{% endblock %}
+
         <title>{% block title %}{% endblock %}</title>
+
+        <!-- Bootstrap -->
+<!--        <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">-->
+        <!-- fontAwesome -->
+        <script src="https://kit.fontawesome.com/57a835be4a.js" crossorigin="anonymous"></script>
+        <!-- My style -->
         <link rel="stylesheet" href="{% static 'css/kh.css' %}">
-        <link rel="stylesheet" href="{% static 'css/contents.css' %}">
         <link rel="stylesheet" href="{% sass_src 'scss/kh.scss' %}">
+        <!-- favicon -->
+        <link rel="shortcut icon" href="#">
+        <link rel="apple-touch-icon" href="#">
+        <link rel="icon" type="image/png" href="#">
+
     </head>
     <body>
-        <div class="wrapper-all">
+        <nav class="nav-drawer">
+            <div data-toggle="nav-drawer" class="nav-menu">
+
+            </div>
+        </nav>
+        <div id="content-wrapper">
+
             <header>
                 <div class="header-fixed">
                     <div class="header-container">
@@ -37,6 +57,7 @@
                     </div>
                 </div>
             </header>
+            <!-- End header -->
 
             {% if messages %}
             <div class="messages">
@@ -75,8 +96,16 @@
                     </div>
                 </div>
             </footer>
+            <!-- End footer -->
         </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-     {% block scripts %}{% endblock %}
+        <!-- End #content-wrapper -->
+
+        <!-- JQuery -->
+        <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+        <!-- Bootstrap bundle -->
+        <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+        {% block scripts %}{% endblock %}
+
     </body>
 </html>
