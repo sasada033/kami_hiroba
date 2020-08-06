@@ -28,23 +28,42 @@
 
     </head>
     <body>
-        <nav class="nav-drawer">
-            <div data-toggle="nav-drawer" class="nav-menu">
+        <nav id="nav-drawer" class="dn">
+            <div class="nav-mask"></div>
+            <div data-toggle="nav-menu" class="nav-menu">
 
             </div>
+            <div data-toggle="nav-search" class="nav-search"></div>
         </nav>
+
         <div id="content-wrapper">
 
             <header>
                 <div class="header-fixed">
                     <div class="header-container">
                         <div class="header-left">
+                            <div class="header-menu-btn">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </div>
                             <div class="header-logo">
                                 <a href="{% url 'khpost:index' %}">カミヒロバ</a>
                             </div>
-                            {% create_search_form request %}
                         </div>
                         <div class="header-right">
+                            <div class="header-search-btn">
+                                <a href="#"><span><i class="fas fa-search"></i></span></a>
+                            </div>
+                            <div class="header-post-btn">
+                                <a href="{% url 'khpost:khpost_create' %}"><span><i class="far fa-edit"></i></span></a>
+                            </div>
+                            <div class="header-mypage-btn">
+                                <a href="#"><span><i class="fas fa-user"></i></span></a>
+                            </div>
+                        </div>
+                        <div class="header-right dn">
+                            {% create_search_form request %}
                             <ul class="header-link">
                                 {% if user.is_authenticated %}
                                 <li><a href="{% url 'account_logout' %}">ログアウト</a></li>
@@ -103,8 +122,10 @@
         <!-- JQuery -->
         <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
         <!-- Bootstrap bundle -->
-        <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!--        <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>-->
 
+        <!-- My Javascript -->
+        <script src="{% static 'js/khpost_nav.js' %}"></script>
         {% block scripts %}{% endblock %}
 
     </body>

@@ -1,3 +1,7 @@
+/*============
+responsive standard
+(phone <= 479px, 480px = 30em <= tablet <= 959px, 960px = 60em <= pc)
+=============*/
 
 /*============
 common settings
@@ -8,7 +12,7 @@ common settings
 
 html {
     overflow-y: scroll; /* 画面右のスクロールバーを常に表示 */
-    font-size: 62.5%; /* マスターフォントサイズ 10px=1rem */
+    font-size: 62.5%; /* マスターフォントサイズ 10px = 1rem */
     line-height: 1.15;
 }
 
@@ -34,21 +38,78 @@ body {
     text-align: left;
 }
 
+button {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    text-align: center;
+    align-items: center;
+    outline: none;
+    cursor: pointer;
+}
+
 /*============
 navigation menu
 =============*/
-.nav-drawer {
-    display: none; /* デフォルト非表示 */
+
+/* ナビゲーション祖先 */
+#nav-drawer {
     position: fixed;
+    top: 5rem;
+    left: 0;
+    z-index: 20;
+    width: 100%;
+    height: 100%;
+}
+
+/* ハンバーガーメニュー */
+.nav-menu {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 20;
+    overflow: hidden;
+    transition: all .2s ease;
 }
 
-.show {
-    display: block; /* アクティブ時 */
+/* 検索ナビゲーション */
+.nav-search {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: all .2s ease;
+}
+
+/* ナビゲーション展開時の背景グレー */
+.nav-mask {
+    display: none;
+    transition: all 0.4s ease;
+}
+
+.db .nav-mask {
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+/* ナビゲーション展開時スクロール禁止 */
+.scroll-stop {
+    position: fixed;
+    width: 100%;
+    height: 100%;
 }
 
 /*============
@@ -57,31 +118,46 @@ contents
 #content-wrapper {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* footerを最下部に固定 */
+    min-height: 100vh; /* フッターを最下部に固定 */
+}
+
+.content-container {
+    display: flex;
+    width: 100%;
+    max-width: 95rem;
+    margin: 0 auto;
 }
 
 /*============
 header
 =============*/
 header {
-    height: 5rem;
+    height: 5rem; /* パテ埋め */
+    background: #fff;
 }
 
 .header-fixed {
-    height: 5rem;
-    width: 100%;
-    background-color: #fff;
-    box-shadow: 0 0 0.8rem 0 rgba(0, 0, 0, 0.15);
-    position: fixed;
+    position: fixed; /* ヘッダーを上部に固定 */
     z-index: 10;
+    width: 100%;
+    height: 5rem;
+    padding-right: 0.8rem;
+    padding-left: 0.8rem;
+    box-shadow: 0 0 0.8rem 0 rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    transition: 0.2s;
+}
+
+.header-fixed.hide {
+    transform: translateY(-100%);
 }
 
 .header-container {
-    max-width: 1170px;
+    display: flex;
     width: 100%;
-    padding: 0 16px;
+    height: 100%;
+    max-width: 95rem;
     margin: 0 auto;
-    display: none;
     justify-content: space-between;
 }
 
@@ -91,11 +167,32 @@ header {
     justify-content: center;
 }
 
+/* メニューアイコンの三本線 */
+.icon-bar {
+    display: block;
+    width: 2.5rem;
+    height: 0.3rem;
+    background: #aaa;
+    transition: .3s;
+}
+
+.icon-bar + .icon-bar {
+    margin-top: 0.6rem;
+}
+
+.header-menu-btn, .header-mypage-btn, .header-post-btn, .header-search-btn {
+    opacity: 0.6;
+    font-size: 2.5rem;
+}
+
+.header-mypage-btn, .header-post-btn, .header-search-btn {
+    margin-left: 1.7rem;
+}
+
 .header-logo a {
     font-weight: bold;
-    font-size: 1.8rem;
-    line-height: 57px;
-    margin: 0 15px;
+    font-size: 2.2rem;
+    margin-left: 1.5rem;
     color: #3e3e3e;
 }
 
@@ -225,10 +322,37 @@ like button
 }
 
 /*============
-responsive settings
+display
 =============*/
-@media (min-width: 1200px) {
-    .container{
-        max-width: 1360px;
+
+.dn {
+    display: none; /* 非表示 */
+}
+
+@media screen and (min-width: 30em) {
+    .dn-m {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 60em) {
+    .dn-l {
+        display: none;
+    }
+}
+
+.db {
+    display: block;
+}
+
+@media screen and (min-width: 30em) {
+    .db-m {
+        display: block;
+    }
+}
+
+@media screen and (min-width: 60em) {
+    .db-l {
+        display: block;
     }
 }

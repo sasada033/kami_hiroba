@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'editor.apps.EditorConfig',
     'storage.apps.StorageConfig',
 
-    'debug_toolbar',
+    # 'debug_toolbar',
     'allauth',
     'allauth.account',
     'sass_processor',
@@ -62,7 +62,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
