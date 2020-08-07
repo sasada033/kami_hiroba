@@ -1,0 +1,11 @@
+/*============
+display
+=============*/
+
+@include responsive('.dn') {
+    display: none;
+}
+
+@include responsive('.db') {
+    display: block;
+}

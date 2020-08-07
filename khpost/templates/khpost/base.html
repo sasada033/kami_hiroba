@@ -14,30 +14,32 @@
 
         <title>{% block title %}{% endblock %}</title>
 
-        <!-- Bootstrap -->
-<!--        <link rel="stylesheet" href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">-->
         <!-- fontAwesome -->
         <script src="https://kit.fontawesome.com/57a835be4a.js" crossorigin="anonymous"></script>
         <!-- My style -->
-        <link rel="stylesheet" href="{% static 'css/kh.css' %}">
-        <link rel="stylesheet" href="{% sass_src 'scss/kh.scss' %}">
+        <link rel="stylesheet" href="{% sass_src 'scss/app.scss' %}">
         <!-- favicon -->
         <link rel="shortcut icon" href="#">
         <link rel="apple-touch-icon" href="#">
         <link rel="icon" type="image/png" href="#">
-
     </head>
     <body>
-        <nav id="nav-drawer" class="dn">
-            <div class="nav-mask"></div>
+        <!-- Navigation -->
+        <nav class="nav-drawer">
             <div data-toggle="nav-menu" class="nav-menu">
-
+                <div class="nav-mask"></div>
+                <div><p>menu</p></div>
             </div>
-            <div data-toggle="nav-search" class="nav-search"></div>
+            <div data-toggle="nav-search" class="nav-search">
+                <div class="nav-mask"></div>
+                <div><p>search</p></div>
+            </div>
         </nav>
+        <!-- End Navigation -->
 
         <div id="content-wrapper">
 
+            <!-- header -->
             <header>
                 <div class="header-fixed">
                     <div class="header-container">
@@ -53,7 +55,7 @@
                         </div>
                         <div class="header-right">
                             <div class="header-search-btn">
-                                <a href="#"><span><i class="fas fa-search"></i></span></a>
+                                <span><i class="fas fa-search"></i></span>
                             </div>
                             <div class="header-post-btn">
                                 <a href="{% url 'khpost:khpost_create' %}"><span><i class="far fa-edit"></i></span></a>
@@ -96,6 +98,7 @@
 
             {% block content %}{% endblock %}
 
+            <!-- footer -->
             <footer>
                 <div class="footer-container">
                     <div class="footer-left">
@@ -121,9 +124,6 @@
 
         <!-- JQuery -->
         <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-        <!-- Bootstrap bundle -->
-<!--        <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>-->
-
         <!-- My Javascript -->
         <script src="{% static 'js/khpost_nav.js' %}"></script>
         {% block scripts %}{% endblock %}

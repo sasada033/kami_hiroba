@@ -1,0 +1,100 @@
+/*============
+variable settings
+=============*/
+
+// Colors
+$white: #fff;
+$black: #000;
+$grey-bg: #f6f6f4;
+$theme: #4d6594;
+
+$grey: #595959;
+$grey-light: #d3d3d3;
+$green: #86c023;
+
+// fonts
+$font-family: -apple-system, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, Verdana, Meiryo, "M+ 1p", sans-serif;
+
+// Transition
+$duration: 400ms;
+$easing: ease;
+
+/*============
+responsive standard
+(phone <= 479px, 480px = 30em <= tablet <= 959px, 960px = 60em <= pc)
+=============*/
+
+$breakpoints: (
+    'sm': 'screen and (min-width: 30em)',
+    // 'md': 'screen and (min-width: 48em)',
+    'lg': 'screen and (min-width: 60em)',
+    // 'xl': 'screen and (min-width: 75em)',
+) !default;
+
+// 第１引数：sm~lg
+@mixin mq ($breakpoint: sm) {
+    @media #{map-get($breakpoints, $breakpoint)} {
+        @content;
+    }
+}
+
+// 第１引数：クラス属性
+@mixin responsive ($class, $bp: $breakpoints) {
+    #{$class} {
+        @content;
+    }
+    @each $suffix, $value in $bp {
+        @media #{$value} {
+            #{$class}-#{$suffix} {
+                @content;
+            }
+        }
+    }
+}
+
+/*============
+common settings
+=============*/
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    overflow-y: scroll; /* 画面右のスクロールバーを常に表示 */
+    font-size: 62.5%; /* マスターフォントサイズ 10px = 1rem */
+    line-height: 1.15;
+}
+
+a {
+    background-color: transparent;
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+    background-color: $grey-bg;
+    color: #212529;
+    font-weight: 400;
+    font-size: 1.4em;
+    line-height: 1.5;
+    font-family: $font-family;
+    text-align: left;
+}
+
+button {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    text-align: center;
+    align-items: center;
+    outline: none;
+    cursor: pointer;
+}
