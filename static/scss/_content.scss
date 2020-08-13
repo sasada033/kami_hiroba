@@ -4,7 +4,7 @@ contents
 #content-wrapper {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* フッターを最下部に固定 */
+    min-height: 100vh; // フッターを最下部に固定
 }
 
 .content-container {

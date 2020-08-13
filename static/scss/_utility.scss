@@ -9,3 +9,24 @@ display
 @include responsive('.db') {
     display: block;
 }
+
+/*============
+button
+=============*/
+
+// 立体的な四角いボタン
+.btn-square {
+    display: inline-block;
+    width: 48%;
+    padding: .5rem 1rem;
+    text-decoration: none;
+    background: #54b733;
+    color: $white;
+    border-bottom: solid .2rem #006400;
+    border-radius: .3rem;
+}
+
+.btn-square:active {
+    transform: translateY(.2rem);
+    border-bottom: none;
+}

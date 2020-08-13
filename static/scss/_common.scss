@@ -3,10 +3,11 @@ variable settings
 =============*/
 
 // Colors
-$white: #fff;
-$black: #000;
-$grey-bg: #f6f6f4;
-$theme: #4d6594;
+$white: #fff; // 白
+$black: #000; // 黒
+$grey-bg: #f6f6f4; // 薄い灰色
+$theme: #4d6594; // 紺色
+$theme-light: #e6ebf5; // 薄い紺色
 
 $grey: #595959;
 $grey-light: #d3d3d3;
@@ -61,8 +62,8 @@ common settings
 }
 
 html {
-    overflow-y: scroll; /* 画面右のスクロールバーを常に表示 */
-    font-size: 62.5%; /* マスターフォントサイズ 10px = 1rem */
+    overflow-y: scroll; // 画面右のスクロールバーを常に表示
+    font-size: 62.5%; // マスターフォントサイズ 10px = 1rem
     line-height: 1.15;
 }
 
