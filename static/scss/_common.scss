@@ -14,7 +14,7 @@ $grey-light: #d3d3d3;
 $green: #86c023;
 
 // fonts
-$font-family: -apple-system, "Segoe UI", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, Verdana, Meiryo, "M+ 1p", sans-serif;
+$font-family: "Hiragino Kaku Gothic ProN", -apple-system, "Segoe UI", "Helvetica Neue", "Yu Gothic", YuGothic, Verdana, Meiryo, "M+ 1p", sans-serif;
 
 // Transition
 $duration: 400ms;
@@ -71,10 +71,18 @@ a {
     background-color: transparent;
     color: #007bff;
     text-decoration: none;
+    cursor: pointer;
 }
 
-a:hover {
-    text-decoration: underline;
+ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+dl, dt, dd, li {
+    margin: 0;
+    padding: 0;
 }
 
 body {

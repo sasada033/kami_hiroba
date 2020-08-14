@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'editor.apps.EditorConfig',
     'storage.apps.StorageConfig',
 
-    # 'debug_toolbar',
+    'debug_toolbar',
     'allauth',
     'allauth.account',
     'sass_processor',
@@ -62,7 +62,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -90,6 +90,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'accounts.context_processors.get_profile',
             ],
         },
     },

@@ -11,22 +11,67 @@ display
 }
 
 /*============
-button
+margin & padding
 =============*/
 
-// 立体的な四角いボタン
-.btn-square {
-    display: inline-block;
-    width: 48%;
-    padding: .5rem 1rem;
-    text-decoration: none;
-    background: #54b733;
-    color: $white;
-    border-bottom: solid .2rem #006400;
-    border-radius: .3rem;
+$sizes: (
+    '0': '0',
+    '1': '.5rem',
+    '2': '1rem',
+    '3': '1.5rem',
+    '4': '2rem',
+    '5': '2.5rem',
+    '6': '3rem',
+) !default;
+
+@each $suffix, $value in $sizes {
+    .m-#{$suffix} {
+        margin: #{$value};
+    }
+    .mh-#{$suffix} {
+        margin-right: #{$value};
+        margin-left: #{$value};
+    }
+    .mv-#{$suffix} {
+        margin-top: #{$value};
+        margin-bottom: #{$value};
+    }
+    .mt-#{$suffix} {
+        margin-top: #{$value};
+    }
+    .mr-#{$suffix} {
+        margin-right: #{$value};
+    }
+    .mb-#{$suffix} {
+        margin-bottom: #{$value};
+    }
+    .ml-#{$suffix} {
+        margin-left: #{$value};
+    }
 }
 
-.btn-square:active {
-    transform: translateY(.2rem);
-    border-bottom: none;
+@each $suffix, $value in $sizes {
+    .p-#{$suffix} {
+        padding: #{$value};
+    }
+    .ph-#{$suffix} {
+        padding-right: #{$value};
+        padding-left: #{$value};
+    }
+    .pv-#{$suffix} {
+        padding-top: #{$value};
+        padding-bottom: #{$value};
+    }
+    .pt-#{$suffix} {
+        padding-top: #{$value};
+    }
+    .pr-#{$suffix} {
+        padding-right: #{$value};
+    }
+    .pb-#{$suffix} {
+        padding-bottom: #{$value};
+    }
+    .pl-#{$suffix} {
+        padding-left: #{$value};
+    }
 }

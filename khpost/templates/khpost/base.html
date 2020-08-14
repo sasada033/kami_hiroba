@@ -26,25 +26,71 @@
     <body>
         <!-- Navigation -->
         <nav class="nav-drawer">
+            <!-- Nav Menu -->
             <div data-toggle="nav-menu" class="nav-menu">
                 <div class="nav-mask"></div>
                 <div class="nav-content nav-menu-content">
                     <div class="nav-content-account">
                         {% if user.is_authenticated %}
-                        <div></div>
+                        <div class="nav-image">
+                            {{ profile.icon }}
+                        </div>
+                        <div>
+                            {{ user.username }}
+                            {{ profile.handle }}
+                        </div>
+                        <div>
+                            フォロワー数 {{ profile.follower.all }}
+                        </div>
+
                         {% else %}
                         <div class="nav-btn">
-                            <a href="#" class="btn-square">新規登録</a>
-                            <a href="#" class="btn-square">ログイン</a>
+                            <a href="{% url 'account_signup' %}" class="btn-square">新規登録</a>
+                            <a href="{% url 'account_login' %}" class="btn-square">ログイン</a>
+                        </div>
+                        <div class="nav-tutorial">
+                            <a href="#"><i class="fas fa-seedling"></i><span class="ml-2">ミカのチュートリアル</span></a>
                         </div>
                         {% endif %}
                     </div>
+                    <div class="nav-content-list">
+                        <ul>
+                            <li>
+                                <a href="{% url 'khpost:khpost_list' %}">
+                                    <i class="fas fa-file-alt"></i><span class="ml-3">記事一覧</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'accounts:settings_profile' %}">
+                                    <i class="fas fa-address-book"></i><span class="ml-3">プロフィール</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-clock"></i><span class="ml-3">タイムライン</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-book"></i><span class="ml-3">デッキ</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="fas fa-info-circle"></i><span class="ml-3">ヘルプ</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
+            <!-- End Nav Menu -->
+            <!-- Nav Search -->
             <div data-toggle="nav-search" class="nav-search">
                 <div class="nav-mask"></div>
                 <div class="nav-search-content"></div>
             </div>
+            <!-- End Nav Search -->
         </nav>
         <!-- End Navigation -->
 

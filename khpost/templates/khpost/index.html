@@ -34,14 +34,19 @@
         <p><a href="{% url 'editor:editor_deck' %}">デッキ作成</a></p>
     </div>
 </div>
-                            <ul>
-                                {% if user.is_authenticated %}
-                                <li><a href="{% url 'account_logout' %}">ログアウト</a></li>
-                                {% else %}
-                                <li><a href="{% url 'account_login' %}">ログイン</a></li>
-                                <li><a href="{% url 'account_signup' %}">新規登録</a></li>
-                                {% endif %}
-                            </ul>
+<div class="wrapper-items">
+    <div class="container">
+
+<ul>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'account_logout' %}"><p>ログアウト</p></a></li>
+    {% else %}
+    <li><a href="{% url 'account_login' %}"><p>ログイン</p></a></li>
+    <li><a href="{% url 'account_signup' %}"><p>新規登録</p></a></li>
+    {% endif %}
+    </ul>
+    </div>
+</div>
 
 </div>
 
