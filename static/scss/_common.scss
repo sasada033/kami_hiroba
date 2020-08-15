@@ -4,7 +4,8 @@ variable settings
 
 // Colors
 $white: #fff; // 白
-$black: #000; // 黒
+$black: #333; // 黒
+$black-half: rgba(0,0,0,.5); // 半透明の黒
 $grey-bg: #f6f6f4; // 薄い灰色
 $theme: #4d6594; // 紺色
 $theme-light: #e6ebf5; // 薄い紺色
@@ -14,7 +15,8 @@ $grey-light: #d3d3d3;
 $green: #86c023;
 
 // fonts
-$font-family: "Hiragino Kaku Gothic ProN", -apple-system, "Segoe UI", "Helvetica Neue", "Yu Gothic", YuGothic, Verdana, Meiryo, "M+ 1p", sans-serif;
+$font-family-primary: -apple-system, Segoe UI, Helvetica Neue, Hiragino Kaku Gothic ProN, meiryo, sans-serif;
+// $font-family-secondary: "Hiragino Kaku Gothic ProN", YuGothic, "Yu Gothic", Roboto, Arial, Meiryo, sans-serif;
 
 // Transition
 $duration: 400ms;
@@ -85,15 +87,19 @@ dl, dt, dd, li {
     padding: 0;
 }
 
+p {
+    margin: 0;
+}
+
 body {
     margin: 0;
     overflow-x: hidden;
     background-color: $grey-bg;
-    color: #212529;
+    color: $black;
     font-weight: 400;
     font-size: 1.4em;
     line-height: 1.5;
-    font-family: $font-family;
+    font-family: $font-family-primary;
     text-align: left;
 }
 

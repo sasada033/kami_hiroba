@@ -5,6 +5,7 @@
 {% load khpost %}
 
 <html lang="ja">
+
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,26 +24,42 @@
         <link rel="apple-touch-icon" href="#">
         <link rel="icon" type="image/png" href="#">
     </head>
+
     <body>
+
         <!-- Navigation -->
         <nav class="nav-drawer">
             <!-- Nav Menu -->
-            <div data-toggle="nav-menu" class="nav-menu">
+            <div class="nav-menu">
                 <div class="nav-mask"></div>
                 <div class="nav-content nav-menu-content">
                     <div class="nav-content-account">
                         {% if user.is_authenticated %}
                         <div class="nav-image">
-                            {{ profile.icon }}
+                            {% if profile.icon %}
+                                {{ profile.icon }}
+                            {% else %}
+                                <img src="{% static 'img/initial_icon_human.png' %}" alt="default">
+                            {% endif %}
                         </div>
-                        <div>
-                            {{ user.username }}
-                            {{ profile.handle }}
+                        <div class="nav-profile">
+                            <p class="np-handle">{{ profile.handle }}</p>
+                            <p class="np-name">@{{ user.username }}</p>
                         </div>
-                        <div>
-                            フォロワー数 {{ profile.follower.all }}
+                        <div class="nav-record">
+                            <a href="#">
+                                <p class="nr-count">{{ user.profile_follower_set.all.count }}</p>
+                                <p class="nr-label">フォロー</p>
+                            </a>
+                            <a href="#" class="mh-1">
+                                <p class="nr-count">{{ profile.follower.count }}</p>
+                                <p class="nr-label">フォロワー</p>
+                            </a>
+                            <a href="#">
+                                <p class="nr-count">{{ post_count }}</p>
+                                <p class="nr-label">記事</p>
+                            </a>
                         </div>
-
                         {% else %}
                         <div class="nav-btn">
                             <a href="{% url 'account_signup' %}" class="btn-square">新規登録</a>
@@ -53,6 +70,7 @@
                         </div>
                         {% endif %}
                     </div>
+                    <!-- End .nav-content-account -->
                     <div class="nav-content-list">
                         <ul>
                             <li>
@@ -82,6 +100,7 @@
                             </li>
                         </ul>
                     </div>
+                    <!-- End .nav-content-list -->
                 </div>
             </div>
             <!-- End Nav Menu -->

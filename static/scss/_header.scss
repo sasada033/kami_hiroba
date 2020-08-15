@@ -38,7 +38,7 @@ navigation common
     position: relative;
     z-index: 25;
     max-height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     background: $white;
     transition: transform .3s cubic-bezier(.23, 1, .32, 1);
 }
@@ -69,7 +69,7 @@ navigation menu
     position: absolute;
     top: 0;
     left: 0;
-    width: 75%;
+    width: 80%;
     max-width: 36rem;
     height: 56rem;
     border-top: 1px solid $grey-bg;
@@ -80,11 +80,51 @@ navigation menu
     transform: translateX(0);
 }
 
+// アカウント情報
 .nav-content-account {
     text-align: center;
     padding: 1.5rem;
 }
 
+.nav-image img {
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+}
+
+.nav-profile {
+    margin-top: 1rem;
+}
+
+.np-handle {
+    color: $black;
+    font-weight: bold;
+    font-size: 1.6rem;
+}
+
+.nav-record {
+    display: flex;
+    width: 100%;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.nav-record a {
+    width: 7rem;
+    text-align: center;
+}
+
+.nr-count {
+    color: $black;
+    font-size: 2rem;
+}
+
+.nr-label, .np-name {
+    color: $black-half;
+    font-size: 1.3rem;
+}
+
+// 新規登録、ログインボタン
 .nav-btn {
     display: flex;
     justify-content: space-between;
@@ -105,6 +145,7 @@ navigation menu
     transform: translateY(.2rem);
 }
 
+// チュートリアルボタン
 .nav-tutorial {
     display: flex;
     margin-top: 1.3rem;
@@ -121,6 +162,7 @@ navigation menu
     font-weight: bold;
 }
 
+// メニューリスト
 .nav-content-list {
     border-top: 1px solid $grey-bg;
 }
