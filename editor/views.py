@@ -6,6 +6,9 @@ from django.http import JsonResponse
 from storage.models import WeissSchwarz, Yugioh
 from .forms import CardSearchForm, DeckCreateForm
 
+from django.urls import reverse, reverse_lazy
+from django.http import HttpResponse
+
 
 @login_required
 def card_search_view(request):
@@ -94,11 +97,14 @@ def deck_create_view(request):
         'card_form': CardSearchForm(),
     }
 
-    if request.method == 'POST' and deck_form.is_valid():
+    # if request.method == 'POST':
+    #     return HttpResponse(reverse('editor:editor_deck'))
 
-        new_deck = deck_form.save(commit=False)
-        new_deck.holder = request.user
-        new_deck.save()
+    # if request.method == 'POST' and deck_form.is_valid():
+    #
+    #     new_deck = deck_form.save(commit=False)
+    #     new_deck.holder = request.user
+    #     new_deck.save()
 
 
     #         with transaction.atomic():  # with節内をトランザクションに含める(エラー時にDBが汚れるのを防止)

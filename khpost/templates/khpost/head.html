@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+{% load static %}
+{% load sass_tags %}
+
+<html lang="ja">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% block description %}{% endblock %}
+        {% block keyword %}{% endblock %}
+
+        <title>{% block title %}{% endblock %}</title>
+
+        <!-- fontAwesome -->
+        <script src="https://kit.fontawesome.com/57a835be4a.js" crossorigin="anonymous"></script>
+        <!-- My style -->
+        <link rel="stylesheet" href="{% sass_src 'scss/app.scss' %}">
+        <!-- favicon -->
+        <link rel="shortcut icon" href="#">
+        <link rel="apple-touch-icon" href="#">
+        <link rel="icon" type="image/png" href="#">
+    </head>
+
+    <body>
+
+        {% block body %}{% endblock %}
+
+        <!-- JQuery -->
+        <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+
+        <!-- My JavaScript-->
+        {% block base_script %}{% endblock %}
+
+        {% block scripts %}{% endblock %}
+
+    </body>
+
+</html>

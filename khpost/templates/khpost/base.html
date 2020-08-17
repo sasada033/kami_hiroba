@@ -1,208 +1,224 @@
-<!DOCTYPE html>
+{% extends 'khpost/head.html' %}
 
 {% load static %}
-{% load sass_tags %}
 {% load khpost %}
 
-<html lang="ja">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% block body %}
 
-        {% block description %}{% endblock %}
-        {% block keyword %}{% endblock %}
 
-        <title>{% block title %}{% endblock %}</title>
+<!-- Navigation -->
+<nav class="nav-drawer">
 
-        <!-- fontAwesome -->
-        <script src="https://kit.fontawesome.com/57a835be4a.js" crossorigin="anonymous"></script>
-        <!-- My style -->
-        <link rel="stylesheet" href="{% sass_src 'scss/app.scss' %}">
-        <!-- favicon -->
-        <link rel="shortcut icon" href="#">
-        <link rel="apple-touch-icon" href="#">
-        <link rel="icon" type="image/png" href="#">
-    </head>
+    <!-- Nav Menu -->
+    <div class="nav-menu">
+        <div class="nav-mask"></div>
+        <div class="nav-content nav-menu-content">
 
-    <body>
-
-        <!-- Navigation -->
-        <nav class="nav-drawer">
-            <!-- Nav Menu -->
-            <div class="nav-menu">
-                <div class="nav-mask"></div>
-                <div class="nav-content nav-menu-content">
-                    <div class="nav-content-account">
-                        {% if user.is_authenticated %}
-                        <div class="nav-image">
-                            {% if profile.icon %}
-                                {{ profile.icon }}
-                            {% else %}
-                                <img src="{% static 'img/initial_icon_human.png' %}" alt="default">
-                            {% endif %}
-                        </div>
-                        <div class="nav-profile">
-                            <p class="np-handle">{{ profile.handle }}</p>
-                            <p class="np-name">@{{ user.username }}</p>
-                        </div>
-                        <div class="nav-record">
-                            <a href="#">
-                                <p class="nr-count">{{ user.profile_follower_set.all.count }}</p>
-                                <p class="nr-label">フォロー</p>
-                            </a>
-                            <a href="#" class="mh-1">
-                                <p class="nr-count">{{ profile.follower.count }}</p>
-                                <p class="nr-label">フォロワー</p>
-                            </a>
-                            <a href="#">
-                                <p class="nr-count">{{ post_count }}</p>
-                                <p class="nr-label">記事</p>
-                            </a>
-                        </div>
-                        {% else %}
-                        <div class="nav-btn">
-                            <a href="{% url 'account_signup' %}" class="btn-square">新規登録</a>
-                            <a href="{% url 'account_login' %}" class="btn-square">ログイン</a>
-                        </div>
-                        <div class="nav-tutorial">
-                            <a href="#"><i class="fas fa-seedling"></i><span class="ml-2">ミカのチュートリアル</span></a>
-                        </div>
-                        {% endif %}
-                    </div>
-                    <!-- End .nav-content-account -->
-                    <div class="nav-content-list">
-                        <ul>
-                            <li>
-                                <a href="{% url 'khpost:khpost_list' %}">
-                                    <i class="fas fa-file-alt"></i><span class="ml-3">記事一覧</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'accounts:settings_profile' %}">
-                                    <i class="fas fa-address-book"></i><span class="ml-3">プロフィール</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fas fa-clock"></i><span class="ml-3">タイムライン</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fas fa-book"></i><span class="ml-3">デッキ</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="fas fa-info-circle"></i><span class="ml-3">ヘルプ</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- End .nav-content-list -->
+            <div class="nav-content-account">
+                {% if user.is_authenticated %}
+                <div class="nav-image">
+                    {% if profile.icon %}
+                    {{ profile.icon }}
+                    {% else %}
+                    <img src="{% static 'img/initial_icon_human.png' %}" alt="default">
+                    {% endif %}
                 </div>
+                <div class="nav-profile">
+                    <p class="np-handle">{{ profile.handle }}</p>
+                    <p class="np-name">@{{ user.username }}</p>
+                </div>
+                <div class="nav-record">
+                    <a href="#">
+                        <p class="nr-count">{{ user.profile_follower_set.all.count }}</p>
+                        <p class="nr-label">フォロー</p>
+                    </a>
+                    <a href="#" class="mh-1">
+                        <p class="nr-count">{{ profile.follower.count }}</p>
+                        <p class="nr-label">フォロワー</p>
+                    </a>
+                    <a href="#">
+                        <p class="nr-count">{{ post_count }}</p>
+                        <p class="nr-label">記事</p>
+                    </a>
+                </div>
+                {% else %}
+                <div class="nav-btn">
+                    <a href="{% url 'account_signup' %}" class="btn-square">新規登録</a>
+                    <a href="{% url 'account_login' %}" class="btn-square">ログイン</a>
+                </div>
+                <div class="nav-tutorial">
+                    <a href="#"><i class="fas fa-seedling"></i><span class="ml-2">ミカのチュートリアル</span></a>
+                </div>
+                {% endif %}
             </div>
-            <!-- End Nav Menu -->
-            <!-- Nav Search -->
-            <div data-toggle="nav-search" class="nav-search">
-                <div class="nav-mask"></div>
-                <div class="nav-search-content"></div>
+            <!-- End .nav-content-account -->
+
+            <div class="nav-content-list">
+                <ul>
+                    <li>
+                        <a href="{% url 'khpost:khpost_list' %}">
+                            <i class="fas fa-file-alt"></i><span class="ml-3">記事一覧</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'accounts:settings_profile' %}">
+                            <i class="fas fa-address-book"></i><span class="ml-3">プロフィール</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-clock"></i><span class="ml-3">タイムライン</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'editor:editor_deck' %}">
+                            <i class="fas fa-book"></i><span class="ml-3">デッキ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-info-circle"></i><span class="ml-3">ヘルプ</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <!-- End Nav Search -->
-        </nav>
-        <!-- End Navigation -->
+            <!-- End .nav-content-list -->
 
-        <div id="content-wrapper">
-
-            <!-- header -->
-            <header>
-                <div class="header-fixed">
-                    <div class="header-container">
-                        <div class="header-left">
-                            <div class="header-menu-btn">
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </div>
-                            <div class="header-logo">
-                                <a href="{% url 'khpost:index' %}">カミヒロバ</a>
-                            </div>
-                        </div>
-                        <div class="header-right">
-                            <div class="header-search-btn">
-                                <span><i class="fas fa-search"></i></span>
-                            </div>
-                            <div class="header-post-btn">
-                                <a href="{% url 'khpost:khpost_create' %}"><span><i class="far fa-edit"></i></span></a>
-                            </div>
-                            <div class="header-mypage-btn">
-                                <a href="#"><span><i class="fas fa-user"></i></span></a>
-                            </div>
-                        </div>
-                        <div class="header-right dn">
-                            {% create_search_form request %}
-                            <ul class="header-link">
-                                {% if user.is_authenticated %}
-                                <li><a href="{% url 'account_logout' %}">ログアウト</a></li>
-                                {% else %}
-                                <li><a href="{% url 'account_login' %}">ログイン</a></li>
-                                <li><a href="{% url 'account_signup' %}">新規登録</a></li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </header>
-            <!-- End header -->
-
-            {% if messages %}
-            <div class="messages">
-                <div class="container">
-                    <div class="">
-                        <ul class="messages-list">
-                            {% for message in messages %}
-                            <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
-                                {{ message }}
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-            {% block content %}{% endblock %}
-
-            <!-- footer -->
-            <footer>
-                <div class="footer-container">
-                    <div class="footer-left">
-                        <h2>カミヒロバ</h2>
-                        <p>Place For All CardGamers.</p>
-                    </div>
-                    <div class="footer-right">
-                        <h3>カミヒロバ</h3>
-                        <ul class="footer-link">
-                            <li><a href="#">カミヒロバとは</a></li>
-                            <li><a href="#">利用規約</a></li>
-                            <li><a href="#">プライバシーポリシー</a></li>
-                            <li><a href="{% url 'contact:inquiry' %}">お問い合わせ</a></li>
-                            <li><a href="#">ヘルプ</a></li>
-                            <li><a href="#">ガイドライン</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </footer>
-            <!-- End footer -->
         </div>
-        <!-- End #content-wrapper -->
+    </div>
+    <!-- End Nav Menu -->
 
-        <!-- JQuery -->
-        <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-        <!-- My Javascript -->
-        <script src="{% static 'js/khpost_nav.js' %}"></script>
-        {% block scripts %}{% endblock %}
+    <!-- Nav Search -->
+    <div class="nav-search">
+        <div class="nav-mask"></div>
+        <div class="nav-search-content"></div>
+    </div>
+    <!-- End Nav Search -->
 
-    </body>
-</html>
+</nav>
+<!-- End Navigation -->
+
+<div id="content-wrapper">
+
+    <!-- header -->
+    <header>
+        <div class="header-fixed">
+            <div class="header-container">
+                <div class="header-left">
+                    <div class="header-menu-btn">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </div>
+                    <div class="header-logo">
+                        <a href="{% url 'khpost:index' %}">カミヒロバ</a>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="header-search-btn">
+                        <span><i class="fas fa-search"></i></span>
+                    </div>
+                    <div class="header-post-btn">
+                        <a href="{% url 'khpost:khpost_create' %}"><span><i class="far fa-edit"></i></span></a>
+                    </div>
+                    <div class="header-mypage-btn">
+                        <a href="#"><span><i class="fas fa-user"></i></span></a>
+                    </div>
+                </div>
+                <div class="header-right dn">
+                    {% create_search_form request %}
+                    <ul class="header-link">
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'account_logout' %}">ログアウト</a></li>
+                        {% else %}
+                        <li><a href="{% url 'account_login' %}">ログイン</a></li>
+                        <li><a href="{% url 'account_signup' %}">新規登録</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End header -->
+
+    {% if messages %}
+    <div class="messages">
+        <div class="container">
+            <div class="">
+                <ul class="messages-list">
+                    {% for message in messages %}
+                    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>
+                        {{ message }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- content -->
+    {% block content %}{% endblock %}
+    <!-- End content-->
+
+    <!-- footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <h2>カミヒロバ</h2>
+                <p>Place For All CardGamers.</p>
+            </div>
+            <div class="footer-right">
+                <h3>カミヒロバ</h3>
+                <ul class="footer-link">
+                    <li><a href="#">カミヒロバとは</a></li>
+                    <li><a href="#">利用規約</a></li>
+                    <li><a href="#">プライバシーポリシー</a></li>
+                    <li><a href="{% url 'contact:inquiry' %}">お問い合わせ</a></li>
+                    <li><a href="#">ヘルプ</a></li>
+                    <li><a href="#">ガイドライン</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mv-6 pv-6">
+            <p>© 2020 カミヒロバ</p>
+        </div>
+    </footer>
+    <!-- End footer -->
+
+</div>
+<!-- End #content-wrapper -->
+
+<!-- Navigation bottom -->
+<nav class="nav-bottom dn-sm">
+    <ul>
+        <li>
+            <a href="#"><i class="fas fa-home"></i><span>ホーム</span></a>
+        </li>
+        <li>
+            <a href="#"><i class="fas fa-clock"></i><span>タイムライン</span></a>
+        </li>
+        <li>
+            <a href="#"><i class="far fa-edit"></i><span>記事投稿</span></a>
+        </li>
+        <li>
+            <a href="#"><i class="fas fa-bell"></i><span>お知らせ</span></a>
+        </li>
+        <li>
+            <a href="#"><i class="fas fa-user"></i><span>マイページ</span></a>
+        </li>
+    </ul>
+</nav>
+<!-- End Navigation bottom -->
+
+
+{% endblock %}
+
+
+{% block base_script %}
+<script src="{% static 'js/khpost_nav.js' %}"></script>
+{% endblock %}
+
+
+

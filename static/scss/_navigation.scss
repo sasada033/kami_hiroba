@@ -1,0 +1,258 @@
+/*============
+navigation common
+=============*/
+
+// ナビゲーション祖先
+.nav-drawer {
+    visibility: hidden; // デフォルト非表示
+    position: fixed;
+    top: 5rem;
+    left: 0;
+    z-index: 20;
+    width: 100%;
+    height: 100%;
+}
+
+// ハンバーガーメニュー, 検索ナビゲーション
+.nav-menu, .nav-search {
+    visibility: hidden; // デフォルト非表示
+    opacity: 0;
+    position: absolute; // 同じ位置に重ねる
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transition: all .2s ease;
+}
+
+// ナビゲーション展開時の背景グレー
+.nav-mask {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .7);
+}
+
+// ナビゲーション展開時の最外層
+.nav-content {
+    position: relative;
+    z-index: 25;
+    max-height: 100%;
+    overflow-y: auto;
+    background: $white;
+    transition: transform .3s cubic-bezier(.23, 1, .32, 1);
+}
+
+// 表示切替
+.show {
+    visibility: visible;
+}
+
+.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+// ナビゲーション展開時スクロール禁止
+.scroll-stop {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+/*============
+navigation menu
+=============*/
+
+// メニューコンテンツ
+.nav-menu-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+    max-width: 36rem;
+    height: 56rem;
+    border-top: 1px solid $grey-bg;
+    transform: translateX(-100%);
+}
+
+.active .nav-menu-content {
+    transform: translateX(0);
+}
+
+// アカウント情報
+.nav-content-account {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.nav-image img {
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+}
+
+.nav-profile {
+    margin-top: 1rem;
+}
+
+.np-handle {
+    color: $black;
+    font-weight: bold;
+    font-size: 1.6rem;
+}
+
+.nav-record {
+    display: flex;
+    width: 100%;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+.nav-record a {
+    width: 7rem;
+    text-align: center;
+}
+
+.nr-count {
+    color: $black;
+    font-size: 2rem;
+}
+
+.nr-label, .np-name {
+    color: $black-half;
+    font-size: 1.3rem;
+}
+
+// 新規登録、ログインボタン
+.nav-btn {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-square {
+    display: inline-block;
+    width: 48%;
+    padding: .5rem 1rem;
+    border-radius: .3rem;
+    box-shadow: 0 .2rem 0 #006400;
+    background: #54b733;
+    color: $white;
+}
+
+.btn-square:active, .nav-tutorial a:active {
+    box-shadow: none;
+    transform: translateY(.2rem);
+}
+
+// チュートリアルボタン
+.nav-tutorial {
+    display: flex;
+    margin-top: 1.3rem;
+    justify-content: center;
+}
+
+.nav-tutorial a {
+    width: 100%;
+    padding: .6rem 0;
+    border-radius: .3rem;
+    box-shadow: 0 .2rem 0 #BBBBBB;
+    background: $grey-bg;
+    color: #54b733;
+    font-weight: bold;
+}
+
+// メニューリスト
+.nav-content-list {
+    border-top: 1px solid $grey-bg;
+}
+
+.nav-content-list ul li {
+    border-bottom: 1px solid $grey-bg;
+}
+
+.nav-content-list ul li a {
+    display: block;
+    padding: 1rem 2rem;
+    color: #25a;
+    font-weight: 500;
+    font-size: 1.7rem;
+}
+
+/*============
+navigation search
+=============*/
+#search-form form {
+    padding: 0;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+.form-control {
+    display: inline;
+    width: auto;
+    border: 1px solid #c4ccce;
+    border-radius: 3px;
+    box-shadow: none;
+    font-size: 1.4rem;
+    font-weight: bold;
+    height: 40px;
+    padding: 6px 12px;
+    line-height: 1.5;
+    vertical-align: middle;
+}
+
+.post-keyword .card-search-keyword{
+    width: 280px;
+}
+
+.post-gametitle .card-search-gametitle{
+    width: 215px;
+    padding: 3px;
+}
+
+.search-button {
+    position: absolute;
+    cursor: pointer;
+}
+
+/*============
+navigation bottom
+=============*/
+
+// 下部固定メニュー
+.nav-bottom {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    z-index: 15;
+    width: 100%;
+    height: 5rem;
+    border-top: 1px solid $grey-bg;
+    background: $white;
+}
+
+.nav-bottom ul {
+    display: flex;
+    width: 100%;
+}
+
+.nav-bottom ul li {
+    padding-top: .1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.nav-bottom ul li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: $theme;
+    font-size: 2rem;
+}
+
+.nav-bottom ul li a span {
+    display: block;
+    font-size: 1rem;
+}

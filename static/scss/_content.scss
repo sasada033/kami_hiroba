@@ -1,10 +1,12 @@
 /*============
-contents
+content common
 =============*/
+
 #content-wrapper {
     display: flex;
-    flex-direction: column;
     min-height: 100vh; // フッターを最下部に固定
+    overflow-x: hidden;
+    flex-direction: column;
 }
 
 .content-container {
@@ -14,6 +16,30 @@ contents
     max-width: 95rem;
     margin: 0 auto;
 }
+
+/*============
+content index.html
+=============*/
+
+.wrapper-top {
+    height: 300px;
+    max-width: 1170px;
+    width: 100%;
+    margin: 0 auto;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+.top-left {
+    width: 60%;
+    margin-left: 16px;
+}
+
+.wrapper-items {
+    padding: 32px 16px 0 16px;
+}
+
 
 /*============
 like button

@@ -69,4 +69,3 @@ $(document).on("click", "#card-insert-button", function() {
     const content = `《<a class="jquery-disabled" href="/">${name}</a>》`;
     insertContent(content)  // セレクトボックスで選択中のカード名をテキストエリアに挿入
 });
-

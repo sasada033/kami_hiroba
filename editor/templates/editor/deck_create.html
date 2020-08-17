@@ -1,36 +1,47 @@
-{% extends 'khpost/base.html' %}
+{% extends 'khpost/head.html' %}
 
 {% load static %}
 
-{% block title %}デッキ登録 - カミヒロバ{% endblock %}
+{% block title %}デッキ作成 - カミヒロバ{% endblock %}
 
-{% block content %}
 
-<div class="wrapper-items">
-    <div class="container">
+{% block body %}
 
-    </div>
-</div>
-<div class="wrapper-items">
-    <div class="container">
-        <form id="card-search-form" action="{% url 'editor:editor_search' %}" method="GET">
-            {{ card_form.gametitle_card }}
-            {{ card_form.keyword_card }}
-            <input type="submit" class="form-control search-button" value="検索"/>
-        </form>
-    </div>
-</div>
-<div class="wrapper-items">
-    <div class="container">
-        <div class="search-results">
-            <p class="error-message"></p>
+
+<div id="content-wrapper">
+    <div class="wrapper-items">
+        <div class="container">
+
         </div>
     </div>
-</div>
+    <div class="wrapper-items">
+        <div class="container">
+            <form id="card-search-form" action="{% url 'editor:editor_search' %}" method="GET">
+                {{ card_form.gametitle_card }}
+                {{ card_form.keyword_card }}
+                <input type="submit" class="form-control search-button" value="検索"/>
+            </form>
+        </div>
+    </div>
+    <div class="wrapper-items">
+        <div class="container">
+            <div class="search-results">
+                <p class="error-message"></p>
+            </div>
+        </div>
+    </div>
 
+    <div class="testpost" data-href="{% url 'editor:editor_deck' %}">
+        <p>ここをクリック</p>
+    </div>
+</div>
+<!-- End #content-wrapper -->
 
 {% endblock %}
+
 
 {% block scripts %}
 <script src="{% static 'js/editor_search.js' %}"></script>
+<script src="{% static 'js/editor_deck.js' %}"></script>
 {% endblock %}
+

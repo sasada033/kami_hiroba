@@ -55,9 +55,9 @@ class UserProfileIndexView(generic.DetailView):
             ).prefetch_related(
                 'tags', 'likes', 'bookmarks'
             ),
-            'profile': get_object_or_404(
-                UserProfile.objects.prefetch_related('follower',), user_name=kwargs.get('object')
-            )
+            # 'profile': get_object_or_404(
+            #     UserProfile.objects.prefetch_related('follower',), user_name=kwargs.get('object')
+            # )
         })
         return context
 
@@ -131,28 +131,3 @@ class DeactivateDoneView(generic.TemplateView):
     """退会処理完了ビュー"""
 
     template_name = 'accounts/deactivate_done.html'
-
-
-# """エラーコード"""
-
-# class UserProfileChangeView(LoginRequiredMixin, generic.FormView):
-#     """ユーザープロフィール更新ビュー"""
-#
-#     form_class = UserProfileForm
-#     template_name = 'accounts/profile_change.html'
-#     success_url = reverse_lazy('accounts:settings_profile')
-#
-#     def form_valid(self, form):
-#         form.save()
-#         messages.success(self.request, 'プロフィールを更新しました。')
-#         return super().form_valid(form)
-#
-#     def form_invalid(self, form):
-#         messages.error(self.request, '入力された内容に不備があります。ご確認下さい。')
-#         return super().form_invalid(form)
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         profile = get_object_or_404(UserProfile, user_name=self.request.user)
-#         context['form'] = UserProfileForm(self.request.POST or None, instance=profile)
-#         return context

@@ -9,7 +9,7 @@ class MyDeck(models.Model):
     """ユーザーに紐づくデッキリストモデル"""
 
     title = models.CharField(
-        verbose_name='デッキタイトル', default='マイデッキ', max_length=100
+        verbose_name='デッキタイトル', default='マイデッキ', max_length=40
     )
     holder = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='デッキ所持者'
