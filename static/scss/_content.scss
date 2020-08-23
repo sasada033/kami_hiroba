@@ -9,13 +9,18 @@ content common
     flex-direction: column;
 }
 
-.content-container {
-    display: flex;
-    flex-direction: column;
+// PC表示用 最大幅制限
+.container {
     width: 100%;
     max-width: 95rem;
     margin: 0 auto;
 }
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 
 /*============
 content index.html
