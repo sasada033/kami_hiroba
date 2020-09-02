@@ -25,8 +25,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('contact/', include('contact.urls')),
-    path('settings/', include('accounts.urls')),
     path('editor/', include('editor.urls')),
+    path('settings/', include('accounts.urls')),
     path('', include('khpost.urls')),
 ]
 

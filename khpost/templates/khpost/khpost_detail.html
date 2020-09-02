@@ -30,10 +30,10 @@
 <div class="wrapper-items">
     <div class="container">
         <hr>
-        {% for comment in postmodel.commentmodel_set.all %}
+        {% for comment in comment_list %}
         <div class="container">
-            <p>{{ comment.created_at | date:'Y-m-d H:i' }}</p>
-            <p>{{ comment | linebreaks | urlize }}</p>
+            <p>{{ comment.created_at | date:'Y-m-d H:i' }} @{{ comment.writer.username }}</p>
+            <p>{{ comment.text | linebreaks | urlize }}</p>
         </div>
         {% empty %}
         <p>コメントはありません</p>
@@ -48,7 +48,7 @@
 </div>
 <div class="wrapper-items">
     <div class="container">
-        <p><a href="{% url 'khpost:accounts_profile' postmodel.writer.username %}">ユーザー詳細</a></p>
+        <p><a href="{% url 'khpost:khpost_profile' postmodel.writer.username %}">ユーザー詳細</a></p>
     </div>
 </div>
 {% if user.is_authenticated %}

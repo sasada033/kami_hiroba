@@ -3,13 +3,13 @@
 {% load static %}
 {% load khpost %}
 
-{% block title %}{{ user.username }} - カミヒロバ{% endblock %}
+{% block title %}{{ user_.username }} - カミヒロバ{% endblock %}
 
 {% block content %}
 
 <div class="wrapper-items">
     <div class="container">
-        <p>{{ user.username }}</p>
+        <p>{{ user_.username }}</p>
         <p>{{ profile.handle }}</p>
         <p>{{ profile.description }}</p>
         <p>{{ profile.location }}</p>
@@ -34,13 +34,18 @@
 </div>
 <div class="wrapper-items">
     <div class="container">
-        <div class="like-btn {% if followed %}on{% endif %}"{% if user.is_authenticated %} data-href="{% url 'accounts:accounts_follow' profile.pk %}"{% endif %}>
+        <div class="like-btn {% if followed %}on{% endif %}"{% if user.is_authenticated %} data-href="{% url 'khpost:khpost_follow' user_.pk %}"{% endif %}>
             <div class="liked-cnt">
                 {{ profile.follower.count }}
             </div>
         </div>
         <p>↑フォロー↑</p>
-        <a href="{% url 'khpost:accounts_profile_followers' user.username %}">フォロワー一覧</a>
+        <a href="{% url 'khpost:khpost_followers' user_.username %}">フォロワー一覧</a>
+    </div>
+</div>
+<div class="wrapper-items">
+    <div class="container">
+        <a href="{% url 'khpost:khpost_deck' user_.username %}">デッキ一覧</a>
     </div>
 </div>
 

@@ -1,28 +1,33 @@
-from django.shortcuts import redirect, get_object_or_404, render
-from django.urls import reverse_lazy
-from django.contrib.auth import get_user_model  # Userモデルを汎用的に取得
-from django.db.models import Q
-from django.db import transaction
-from django.views import generic
 from django.contrib import messages
+from django.contrib.auth import get_user_model  # Userモデルを汎用的に取得
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.db import transaction
+from django.db.models import Q
 from django.http import JsonResponse
-from .models import PostModel, TagModel
+from django.shortcuts import redirect, get_object_or_404, render
+from django.urls import reverse_lazy
+from django.views import View
+from django.views.generic import TemplateView, ListView, DetailView, FormView, DeleteView
+from django.views.generic.detail import SingleObjectMixin
+
+from .models import PostModel, TagModel, CommentModel
 from .forms import PostCreateForm, TagCreateFormSet, CommentCreateForm, PostSearchForm
 from editor.forms import CardSearchForm
+from accounts.models import UserProfile
 
 
 User = get_user_model()
 
 
-class KhpostIndexView(generic.TemplateView):
+class KhpostIndexView(TemplateView):
     """トップページビュー"""
 
     template_name = 'khpost/index.html'
 
 
-class KhpostListView(generic.ListView):
+class KhpostListView(ListView):
     """記事一覧＋検索結果表示ビュー"""
 
     model = PostModel
@@ -57,36 +62,67 @@ class KhpostListView(generic.ListView):
         return queryset
 
 
-def khpost_detail(request, pk):
-    """記事詳細＋コメント機能＋いいね機能ビュー"""
+class KhpostDisplay(DetailView):
+    """記事詳細ビュー"""
 
-    # 詳細記事取得
-    article = \
-        get_object_or_404(
-            PostModel.objects.select_related('writer', 'game').prefetch_related('tags', 'likes', 'bookmarks'), pk=pk
-        )
+    model = PostModel
+    template_name = 'khpost/khpost_detail.html'
 
-    # コメントフォーム生成
-    form = CommentCreateForm(request.POST or None)
-    if request.method == 'POST' and form.is_valid():  # request.POST時の処理
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # コメントモデル取得
+        comment_list = CommentModel.objects.select_related('writer',).filter(target=self.object)
+        # いいねボタンの初期値設定
+        if self.request.user in self.object.likes.all():
+            like_active = True  # すでにいいねしている場合
+        else:
+            like_active = False
+
+        context.update({
+            'comment_list': comment_list,
+            'like_active': like_active,
+            'form': CommentCreateForm(),
+        })
+        return context
+
+
+class KhpostComment(LoginRequiredMixin, SingleObjectMixin, FormView):
+    """
+    コメント投稿ビュー
+    SingleObjectMixinによりDetailViewの機能を部分的に使用する。
+    """
+
+    form_class = CommentCreateForm
+    model = PostModel
+    template_name = 'khpost/khpost_detail.html'
+
+    def post(self, request, *args, **kwargs):
+        # コメントを紐づける対象の記事をインスタンス変数に格納
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
         comment = form.save(commit=False)
-        comment.writer = request.user
-        comment.target = article
+        comment.writer = self.request.user
+        comment.target = self.object
         comment.save()
-        return redirect('khpost:khpost_detail', pk=pk)
+        messages.success(self.request, 'コメントを投稿しました。')
+        return redirect('khpost:khpost_detail', pk=self.object.pk)
 
-    # いいねボタンの初期値設定
-    if request.user in article.likes.all():
-        like_active = True  # すでにいいねしている場合
-    else:
-        like_active = False
 
-    context = {
-        'postmodel': article,
-        'form': form,
-        'like_active': like_active
-    }
-    return render(request, 'khpost/khpost_detail.html', context)
+class KhpostDetailView(View):
+    """
+    記事詳細＋コメント投稿ビュー
+    GET時には記事詳細ビューに処理を渡す。POST時にはコメント投稿ビューに処理を渡す。
+    """
+
+    def get(self, request, *args, **kwargs):
+        view = KhpostDisplay.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = KhpostComment.as_view()
+        return view(request, *args, **kwargs)
 
 
 @login_required
@@ -150,6 +186,11 @@ def khpost_update_view(request, pk):
     instance = get_object_or_404(
         PostModel.objects.select_related('writer', 'game').prefetch_related('tags', 'likes', 'bookmarks'), pk=pk
     )
+
+    # 他のユーザーのアクセスを禁止
+    if not request.user == instance.writer:
+        raise PermissionDenied
+
     post_form = PostCreateForm(request.POST or None, instance=instance)
     context = {
         'post_form': post_form,
@@ -199,7 +240,7 @@ def khpost_update_view(request, pk):
     return render(request, 'khpost/khpost_update.html', context)
 
 
-class KhpostDeleteView(LoginRequiredMixin, generic.DeleteView):
+class KhpostDeleteView(LoginRequiredMixin, DeleteView):
     """記事削除ビュー"""
 
     model = PostModel
@@ -234,5 +275,97 @@ def khpost_like_view(request, pk):
 
     data = {
         'liked': liked,
+    }
+    return JsonResponse(data)
+
+
+class UserProfileIndexView(DetailView):
+    """ユーザーインデックスビュー(プロフィール＆記事一覧)"""
+
+    model = User
+    context_object_name = 'user_'
+    template_name = 'khpost/profile.html'
+    slug_field = 'username'  # urlの末尾に対応するusernameを割り当てる
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # PostModel,UserProfile のクエリセットを取得
+        post_list = PostModel.objects.filter(
+            writer=kwargs.get('object'), is_public=1
+        ).select_related('writer', 'game').prefetch_related('tags', 'likes', 'bookmarks')
+
+        profile = get_object_or_404(
+            UserProfile.objects.prefetch_related('follower',), user_name=kwargs.get('object')
+        )
+
+        context.update({
+            'post_list': post_list,
+            'profile': profile
+        })
+        return context
+
+
+class UserProfileDeckView(DetailView):
+    """ユーザープロフィールデッキビュー(プロフィール＆デッキ一覧)"""
+
+    model = User
+    template_name = 'khpost/profile_followers.html'
+    slug_field = 'username'  # urlの末尾に対応するusernameを割り当てる
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # UserProfile のクエリセットを取得
+        context.update({
+            'profile': get_object_or_404(
+                UserProfile.objects.prefetch_related('follower', ), user_name=kwargs.get('object')
+            )
+        })
+        return context
+
+
+class UserProfileFollowersView(DetailView):
+    """ユーザープロフィールフォロワービュー(プロフィール＆フォロワー一覧)"""
+
+    model = User
+    template_name = 'khpost/profile_followers.html'
+    slug_field = 'username'  # urlの末尾に対応するusernameを割り当てる
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # UserProfile のクエリセットを取得
+        context.update({
+            'profile': get_object_or_404(
+                UserProfile.objects.prefetch_related('follower', ), user_name=kwargs.get('object')
+            )
+        })
+        return context
+
+
+@login_required
+def khpost_follow_view(request, pk):
+    """ユーザーフォローボタン処理ビュー"""
+
+    obj = get_object_or_404(UserProfile, pk=pk)
+    status = request.GET.get('status')
+    user = request.user
+
+    if user in obj.follower.all():  # そのユーザーを既にフォロー中の場合
+        if status:  # フォローボタン押下時(status=true)
+            obj.follower.remove(user)  # フォローリストからそのユーザーを除外
+            follow = False  # 非フォロー状態であることをテンプレートに伝達
+        else:
+            follow = True   # フォロー状態であることをテンプレートに伝達
+    else:  # そのユーザーをまだフォローしていない場合
+        if status:  # フォローボタン押下時(status=true)
+            obj.follower.add(user)  # フォローリストにそのユーザーを追加
+            follow = True  # フォロー状態であることをテンプレートに伝達
+        else:
+            follow = False  # 非フォロー状態であることをテンプレートに伝達
+
+    data = {
+        'followed': follow,
     }
     return JsonResponse(data)

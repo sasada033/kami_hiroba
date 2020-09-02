@@ -1,10 +1,13 @@
-from django.shortcuts import redirect, get_object_or_404, render
-from django.db.models import Q
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from django.views.generic import CreateView
 from django.http import JsonResponse
-from storage.models import WeissSchwarz, Yugioh
+from django.shortcuts import redirect, get_object_or_404, render
+
 from .forms import CardSearchForm, DeckCreateForm
+from storage.models import WeissSchwarz, Yugioh
 
 from django.urls import reverse, reverse_lazy
 from django.http import HttpResponse
@@ -87,15 +90,21 @@ def card_search_view(request):
         return JsonResponse(data)
 
 
-@login_required
-def deck_create_view(request):
+class DeckCreateView(LoginRequiredMixin, CreateView):
     """マイデッキ作成ビュー"""
 
-    deck_form = DeckCreateForm(request.POST or None)
-    context = {
-        'deck_form': deck_form,
-        'card_form': CardSearchForm(),
-    }
+    pass
+
+    # def deck_create_view(request):
+    # """マイデッキ作成ビュー"""
+    #
+    # deck_form = DeckCreateForm(request.POST or None)
+    # context = {
+    #     'deck_form': deck_form,
+    #     'card_form': CardSearchForm(),
+    # }
+
+
 
     # if request.method == 'POST':
     #     return HttpResponse(reverse('editor:editor_deck'))
@@ -143,6 +152,6 @@ def deck_create_view(request):
     #         'card_form': CardSearchForm(),
     #     })
 
-    return render(request, 'editor/deck_create.html', context)
+    # return render(request, 'editor/deck_create.html', context)
 
 

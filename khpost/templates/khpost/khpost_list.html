@@ -12,7 +12,7 @@
             {% for postmodel in postmodel_list %}
             <article>
                 <h2><a href="{% url 'khpost:khpost_detail' postmodel.pk %}">{{ postmodel.title }}</a></h2>
-                <a href="{% url 'khpost:accounts_profile' postmodel.writer.username %}">{{ postmodel.writer }}</a>
+                <a href="{% url 'khpost:khpost_profile' postmodel.writer.username %}">{{ postmodel.writer }}</a>
                 <p>{{ postmodel.created_at | timesince | split_timesince:',' }}前 -</p>
                 <p>{{ postmodel.game }}</p>
             </article>

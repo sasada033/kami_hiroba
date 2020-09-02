@@ -1,9 +1,15 @@
 from django import forms
-from django.contrib.auth import get_user_model
-from .models import PostModel, TagModel, GameTitleModel, CommentModel
+from .models import PostModel, TagModel, CommentModel
 
 
-User = get_user_model()  # プロジェクトのユーザーモデルを取得
+GAME_TITLES = (
+    ('', 'ゲームを選択'),
+    ('1', '遊戯王'),
+    ('2', 'デュエルマスターズ'),
+    ('3', 'ヴァイスシュヴァルツ'),
+    ('4', 'MTG'),
+    ('5', 'WIXOSS'),
+)
 
 
 class PostCreateForm(forms.ModelForm):
@@ -51,8 +57,8 @@ class PostSearchForm(forms.Form):
     keyword = forms.CharField(
         label='キーワード', required=False, widget=forms.TextInput(attrs={'placeholder': 'キーワードを入力'})
     )
-    gametitle = forms.ModelChoiceField(
-        label='ゲームタイトルの選択', required=False, queryset=GameTitleModel.objects.all(),
+    gametitle = forms.ChoiceField(
+        label='ゲームタイトルの選択', required=False, choices=GAME_TITLES,
     )
 
     def __init__(self, *args, **kwargs):
@@ -60,4 +66,3 @@ class PostSearchForm(forms.Form):
 
         self.fields['keyword'].widget.attrs['class'] = 'form-control post-keyword'
         self.fields['gametitle'].widget.attrs['class'] = 'form-control post-gametitle'
-        self.fields['gametitle'].empty_label = 'すべてのタイトル'

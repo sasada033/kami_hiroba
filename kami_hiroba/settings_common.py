@@ -213,6 +213,13 @@ ACCOUNT_LOGOUT_REDIRECT_URL = 'khpost:index'
 # ログアウトリンクのクリック一発でログアウトする設定
 ACCOUNT_LOGOUT_ON_GET = True
 
+# 使用できないユーザー名文字列
+ACCOUNT_USERNAME_BLACKLIST = [
+    env('ADMIN_SITE_URL'), '__debug__', 'media', 'static', 'backup',
+    'accounts', 'ckeditor', 'contact', 'editor', 'settings',
+    'new', 'create',
+]
+
 # メールアドレス確認後のリダイレクト先
 # プロフィールの初期設定
 # ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'accounts:settings_profile'

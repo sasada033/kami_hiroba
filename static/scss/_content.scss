@@ -21,30 +21,25 @@ content common
     flex-direction: column;
 }
 
-
 /*============
 content index.html
 =============*/
 
 .wrapper-top {
-    height: 300px;
-    max-width: 1170px;
-    width: 100%;
-    margin: 0 auto;
+    height: 30rem;
     background-color: #fff;
     display: flex;
     align-items: center;
 }
 
 .top-left {
-    width: 60%;
-    margin-left: 16px;
+    width: 70%;
+    margin-left: 2rem;
 }
 
 .wrapper-items {
     padding: 32px 16px 0 16px;
 }
-
 
 /*============
 like button

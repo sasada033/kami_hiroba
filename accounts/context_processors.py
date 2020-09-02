@@ -12,11 +12,13 @@ def get_profile(request):
 
     elif request.user.is_authenticated:
         profile = get_object_or_404(UserProfile, user_name=request.user)
+        following_count = UserProfile.objects.filter(follower=request.user).count()
         post_count = PostModel.objects.filter(writer=request.user, is_public=1).count()
 
         context.update({
-            'profile': profile,
-            'post_count': post_count
+            'super_profile': profile,
+            'super_following_count': following_count,
+            'super_post_count': post_count
         })
 
     return context
